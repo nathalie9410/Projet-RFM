@@ -2,7 +2,6 @@
 """
 Created on Sat novembre 12 10:24:21 2022
 
-@author: virginie.bouland
 """
 import streamlit as st
 import pandas as pd
