@@ -45,9 +45,9 @@ Appliquer une analyse RFM (Récence, Fréquence, Montant) sur une base clients p
 
 ## 📓 Notebooks
 
-- [Preprocessing](./P1_Preprocessing_Projet_avr22_cda_e_commerce.ipynb) : Nettoyage des données et exploration initiale
-- [Exploration](./P2_Exploration_Projet_avr22_cda_e_commerce.ipynb) : Analyse exploratoire approfondie
-- [RFM Analysis](./P3_RFM_Projet_avr22_cda_e_commerce.ipynb) : Construction des scores RFM et segmentation
+- [Preprocessing](./P1_Preprocessing_Projet_avr22_cda_e_commerce.ipynb) : Nettoyage des données et exploration initiale (visualisations incluses)
+- [Exploration](./P2_Exploration_Projet_avr22_cda_e_commerce.ipynb) : Analyse exploratoire approfondie (avec graphiques)
+- [RFM Analysis](./P3_RFM_Projet_avr22_cda_e_commerce.ipynb) : Construction des scores RFM, segmentation et visualisations finales
 
 ---
 
