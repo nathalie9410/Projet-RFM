@@ -56,7 +56,12 @@ if page == pages[0]:
     st.title("")
   
     st.markdown("<p style = 'font-size : 22px'>DataFrame Originel <a href =https://www.kaggle.com/zusmani/pakistans-largest-ecommerce-dataset>RFM</a></p>",unsafe_allow_html=True)
-    df1= pd.read_csv("Pakistan Largest Ecommerce Dataset.csv")
+   
+    url = "https://drive.google.com/uc?export=download&id=1gWKM0KgTq_PxFYQpMtB78EHmwszOdses"
+    df1 = pd.read_csv(url)
+
+   
+    #df1= pd.read_csv("Pakistan Largest Ecommerce Dataset.csv")
 
     st.dataframe(df1.head())
     st.markdown(" <br>", unsafe_allow_html=True)
@@ -634,3 +639,4 @@ else:
         } </style> ''', unsafe_allow_html=True)
     
                    
+
