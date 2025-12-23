@@ -57,8 +57,25 @@ if page == pages[0]:
   
     st.markdown("<p style = 'font-size : 22px'>DataFrame Originel <a href =https://www.kaggle.com/zusmani/pakistans-largest-ecommerce-dataset>RFM</a></p>",unsafe_allow_html=True)
    
-    url = "https://drive.google.com/uc?export=download&id=1gWKM0KgTq_PxFYQpMtB78EHmwszOdses"
-    df1 = pd.read_csv(url)
+    #url = "https://drive.google.com/uc?export=download&id=1gWKM0KgTq_PxFYQpMtB78EHmwszOdses"
+    #df1 = pd.read_csv(url)
+
+   import zipfile
+   import io
+
+   # Chemin vers le zip dans ton repo
+   zip_path = "datasets.zip"
+   csv_name = "Pakistan Largest Ecommerce Dataset.csv"  # nom exact dans le zip
+
+   with zipfile.ZipFile(zip_path) as z:
+       with z.open(csv_name) as f:
+           df1 = pd.read_csv(
+               f,
+               low_memory=False,
+               na_values=[' ', '\\N', 'NaN ']
+           )
+
+   pd.set_option('display.max_columns', None)
 
    
     #df1= pd.read_csv("Pakistan Largest Ecommerce Dataset.csv")
