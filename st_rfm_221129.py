@@ -220,430 +220,418 @@ elif page == pages[1]:
    df['Created_at'] = pd.to_datetime(df['Created_at'])
    df['Customer since'] = pd.to_datetime(df['Customer since']).dt.to_period('M')
    df_rfm = pd.read_csv("df_rfm.csv")
-
-    
    
-st.markdown("<h2 style='font-weight:lighter; text-align: center; font-size: 60px;text-shadow: -1px -1px #000, 1px 1px #000, -3px 0 4px #000;'>Mise en oeuvre de la méthode RFM</h2>", unsafe_allow_html=True)
-st.markdown(" <br><br>", unsafe_allow_html=True)
-    
-
-    st.markdown("<h2 style='text-align: center; font-size:15'>Calcul des composantes RFM</h2>", unsafe_allow_html=True)
-    st.markdown("<br>", unsafe_allow_html=True)
-            
-    col1, col2,col3 = st.columns([1,3,1])
-    with col1: 
-        ""
-    with col2: 
-        hide_table_row_index = """
+   st.markdown("<h2 style='font-weight:lighter; text-align: center; font-size: 60px;text-shadow: -1px -1px #000, 1px 1px #000, -3px 0 4px #000;'>Mise en oeuvre de la méthode RFM</h2>", unsafe_allow_html=True)
+   st.markdown(" <br><br>", unsafe_allow_html=True)
+   
+   st.markdown("<h2 style='text-align: center; font-size:15'>Calcul des composantes RFM</h2>", unsafe_allow_html=True)
+   st.markdown("<br>", unsafe_allow_html=True)
+   
+   col1, col2,col3 = st.columns([1,3,1])
+   with col1:
+      ""
+   with col2:
+      hide_table_row_index = """
             <style>
             thead tr th:first-child {display:none}
             tbody th {display:none}
             </style>
             """
-        st.markdown(hide_table_row_index, unsafe_allow_html=True)
-        st.table(df_rfm.head()) 
+      st.markdown(hide_table_row_index, unsafe_allow_html=True)
+      st.table(df_rfm.head()) 
 
-    with col3: 
-        ""
-    st.markdown(" <br><br>", unsafe_allow_html=True)
-    
-    
-    st.markdown("<h2 style='text-align: center; font-size:15'>1ère approche de clustering</h2>", unsafe_allow_html=True)
+   with col3:
+      ""
+   st.markdown(" <br><br>", unsafe_allow_html=True)
+   st.markdown("<h2 style='text-align: center; font-size:15'>1ère approche de clustering</h2>", unsafe_allow_html=True)
 
 
-    st.write("Le score RFM est calculé en fonction de la récence, de la fréquence et des classements de normalisation de la valeur monétaire. Sur la base de ce score, nous divisons nos clients. Ici, nous les notons sur une échelle de 5. La formule utilisée pour calculer le score rfm est : 0,15 X Score de récence + 0,28 X Score de fréquence + 0,57 X Score monétaire")
-    st.markdown("<br>", unsafe_allow_html=True)
-    hide_table_row_index = """
+   st.write("Le score RFM est calculé en fonction de la récence, de la fréquence et des classements de normalisation de la valeur monétaire. Sur la base de ce score, nous divisons nos clients. Ici, nous les notons sur une échelle de 5. La formule utilisée pour calculer le score rfm est : 0,15 X Score de récence + 0,28 X Score de fréquence + 0,57 X Score monétaire")
+   st.markdown("<br>", unsafe_allow_html=True)
+   hide_table_row_index = """
             <style>
             thead tr th:first-child {display:none}
             tbody th {display:none}
             </style>
             """
-    st.markdown(hide_table_row_index, unsafe_allow_html=True)
+   st.markdown(hide_table_row_index, unsafe_allow_html=True)
     
-    st.table(df_rfm1.head())
+   st.table(df_rfm1.head())
  
-    df_analysis_rfm1 = df_rfm1.groupby('Customer_segment').agg({'Customer_segment':'count'})
+   df_analysis_rfm1 = df_rfm1.groupby('Customer_segment').agg({'Customer_segment':'count'})
 
-    df_analysis_rfm1.rename({'Customer_segment':'Total_customer_id'}, axis=1, inplace=True)
-    df_analysis_rfm1['count_share'] = ((df_analysis_rfm1['Total_customer_id'] / df_analysis_rfm1['Total_customer_id'].sum()) * 100).round(2)
-    df_analysis_rfm1.sort_values(by='Total_customer_id', ascending=False)
-    st.markdown(" <br>", unsafe_allow_html=True)
+   df_analysis_rfm1.rename({'Customer_segment':'Total_customer_id'}, axis=1, inplace=True)
+   df_analysis_rfm1['count_share'] = ((df_analysis_rfm1['Total_customer_id'] / df_analysis_rfm1['Total_customer_id'].sum()) * 100).round(2)
+   df_analysis_rfm1.sort_values(by='Total_customer_id', ascending=False)
+   st.markdown(" <br>", unsafe_allow_html=True)
     
     
     
-    fig, ax = plt.subplots(figsize=(16,6))
-    labels = df_analysis_rfm1.index + df_analysis_rfm1['count_share'].apply(lambda x: ' ' + str(x) + ' %')
-    fig, ax = plt.subplots(figsize=(16,6))
-    squarify.plot(sizes=df_analysis_rfm1['count_share'], label=labels, alpha=.8, color=colors)
-    ax.set_title('Répartition des différents clusters', fontsize=20, color='b')
-    plt.axis('off');
-    st.pyplot(fig)
+   fig, ax = plt.subplots(figsize=(16,6))
+   labels = df_analysis_rfm1.index + df_analysis_rfm1['count_share'].apply(lambda x: ' ' + str(x) + ' %')
+   fig, ax = plt.subplots(figsize=(16,6))
+   squarify.plot(sizes=df_analysis_rfm1['count_share'], label=labels, alpha=.8, color=colors)
+   ax.set_title('Répartition des différents clusters', fontsize=20, color='b')
+   plt.axis('off');
+   st.pyplot(fig)
 
 
 
-    st.markdown(" <br><br>", unsafe_allow_html=True)
-    st.markdown("<h2 style='text-align: center; font-size:15'>2ème approche de clustering</h2>", unsafe_allow_html=True)
+   st.markdown(" <br><br>", unsafe_allow_html=True)
+   st.markdown("<h2 style='text-align: center; font-size:15'>2ème approche de clustering</h2>", unsafe_allow_html=True)
 
-    st.write("Dans cette approche nous appliquons une approche basée sur un système de points affectés à chaque client en fonction du quintile auquel il appartient pour chaque composante RFM")
+   st.write("Dans cette approche nous appliquons une approche basée sur un système de points affectés à chaque client en fonction du quintile auquel il appartient pour chaque composante RFM")
     
-    st.markdown(" <br>", unsafe_allow_html=True)
-    st.markdown("<br>", unsafe_allow_html=True)
-    hide_table_row_index = """
+   st.markdown(" <br>", unsafe_allow_html=True)
+   st.markdown("<br>", unsafe_allow_html=True)
+   hide_table_row_index = """
             <style>
             thead tr th:first-child {display:none}
             tbody th {display:none}
             </style>
             """
-    st.markdown(hide_table_row_index, unsafe_allow_html=True)
-    st.table(df_rfm2.head())
+   st.markdown(hide_table_row_index, unsafe_allow_html=True)
+   st.table(df_rfm2.head())
     
-    st.markdown(" <br>", unsafe_allow_html=True)
-    #Création de df_analysis
-    df_analysis = df_rfm2.groupby('Label').agg({'Label':'count'})
-    df_analysis.rename({'Label':'Total_customer_id'}, axis=1, inplace=True)
-    df_analysis['count_share'] = ((df_analysis['Total_customer_id'] / df_analysis['Total_customer_id'].sum()) * 100).round(2)
+   st.markdown(" <br>", unsafe_allow_html=True)
+   
+   #Création de df_analysis
+   df_analysis = df_rfm2.groupby('Label').agg({'Label':'count'})
+   df_analysis.rename({'Label':'Total_customer_id'}, axis=1, inplace=True)
+   df_analysis['count_share'] = ((df_analysis['Total_customer_id'] / df_analysis['Total_customer_id'].sum()) * 100).round(2)
 
-    df_analysis.sort_values(by='Total_customer_id', ascending=False)
+   df_analysis.sort_values(by='Total_customer_id', ascending=False)
       
-    labels = df_analysis.index + df_analysis['count_share'].apply(lambda x: ' ' + str(x) + ' %')
+   labels = df_analysis.index + df_analysis['count_share'].apply(lambda x: ' ' + str(x) + ' %')
 
-    fig, ax = plt.subplots(figsize=(16,6))
-    squarify.plot(sizes=df_analysis['count_share'], label=labels, alpha=.8, color=colors)
-    ax.set_title('Répartition des différents clusters', fontsize=20, color='b')
-    plt.axis('off')
-    st.pyplot(fig)
+   fig, ax = plt.subplots(figsize=(16,6))
+   squarify.plot(sizes=df_analysis['count_share'], label=labels, alpha=.8, color=colors)
+   ax.set_title('Répartition des différents clusters', fontsize=20, color='b')
+   plt.axis('off')
+   st.pyplot(fig)
 
 
 elif page == pages[2]:
-    df = pd.read_csv('exploration.csv')
-    df_rfm2 = pd.read_csv("df_rfm2.csv")
-    pd.set_option('display.max_columns', None)
-    df['Created_at'] = pd.to_datetime(df['Created_at'])
-    df['Customer since'] = pd.to_datetime(df['Customer since']).dt.to_period('M')    
-    df2 = pd.read_csv('df2.csv',index_col='Customer_id')
-    pd.set_option('display.max_columns', None)
-    df2['Created_at'] = pd.to_datetime(df2['Created_at'])
-    df2['Customer since'] = pd.to_datetime(df2['Customer since']).dt.to_period('M')
-    st.markdown("<h2 style='font-weight:lighter; text-align: center; font-size: 60px;text-shadow: -1px -1px #000, 1px 1px #000, -3px 0 4px #000;'>Analyse des Clusters</h2>", unsafe_allow_html=True)
-    st.markdown(" <br>", unsafe_allow_html=True)
-    
-    
-    
-    activation_function = st.selectbox("Choix du cluster", [" ","Top Customer", "Client dilemme","Client à potentiel élevé", "Client à surveiller","Client sans potentiel stratégique"])
+   df = pd.read_csv('exploration.csv')
+   df_rfm2 = pd.read_csv("df_rfm2.csv")
+   pd.set_option('display.max_columns', None)
+   df['Created_at'] = pd.to_datetime(df['Created_at'])
+   df['Customer since'] = pd.to_datetime(df['Customer since']).dt.to_period('M')
+   df2 = pd.read_csv('df2.csv',index_col='Customer_id')
+   pd.set_option('display.max_columns', None)
+   df2['Created_at'] = pd.to_datetime(df2['Created_at'])
+   df2['Customer since'] = pd.to_datetime(df2['Customer since']).dt.to_period('M')
+   st.markdown("<h2 style='font-weight:lighter; text-align: center; font-size: 60px;text-shadow: -1px -1px #000, 1px 1px #000, -3px 0 4px #000;'>Analyse des Clusters</h2>", unsafe_allow_html=True)
+   st.markdown(" <br>", unsafe_allow_html=True)
+   
+   activation_function = st.selectbox("Choix du cluster", [" ","Top Customer", "Client dilemme","Client à potentiel élevé", "Client à surveiller","Client sans potentiel stratégique"])
    
     
 # choix sans titre
-    if activation_function == " ":
-
-        st.markdown("<h2 style='text-align: center; font-size:15'>Distribution des clusters</h2>", unsafe_allow_html=True)
-        st.markdown(" <br><br>", unsafe_allow_html=True)
-        fig= plt.figure(figsize=(10,5))
-        ax = fig.add_subplot()
+   if activation_function == " ":
+      st.markdown("<h2 style='text-align: center; font-size:15'>Distribution des clusters</h2>", unsafe_allow_html=True)
+      st.markdown(" <br><br>", unsafe_allow_html=True)
+      fig= plt.figure(figsize=(10,5))
+      ax = fig.add_subplot()
         
-        sns.countplot(df_rfm2["Label"], palette = colors)
-        total = float(len(df_rfm2["Label"]))
-        for p in ax.patches:
-            height = p.get_height()
-            ax.annotate( "{:.2f}%".format(100 * p.get_height()/total),(p.get_x() + p.get_width()/2, height+.05),
+      sns.countplot(df_rfm2["Label"], palette = colors)
+      total = float(len(df_rfm2["Label"]))
+      for p in ax.patches:
+         height = p.get_height()
+         ax.annotate( "{:.2f}%".format(100 * p.get_height()/total),(p.get_x() + p.get_width()/2, height+.05),
                              ha="center",va="bottom",fontsize=10)             
-        plt.xticks(rotation = 45)
-        plt.xlabel("")
-        st.pyplot(fig)
+      plt.xticks(rotation = 45)
+      plt.xlabel("")
+      st.pyplot(fig)
     
-        st.markdown(" <br><br>", unsafe_allow_html=True)
-        st.markdown("<h2 style='text-align: center; font-size:15'>Profils des clusters</h2>", unsafe_allow_html=True)
-        st.markdown("<br>", unsafe_allow_html=True)
-        fig = sns.lmplot(x='Recency', y='Frequency', data=df_rfm2, hue='Label', col='Label')
-        fig.set_titles("{col_name}",size = 20)
-        fig.set_xlabels(size = 20)
-        fig.set_ylabels(size = 20)
-        st.pyplot(fig)
+      st.markdown(" <br><br>", unsafe_allow_html=True)
+      st.markdown("<h2 style='text-align: center; font-size:15'>Profils des clusters</h2>", unsafe_allow_html=True)
+      st.markdown("<br>", unsafe_allow_html=True)
+      fig = sns.lmplot(x='Recency', y='Frequency', data=df_rfm2, hue='Label', col='Label')
+      fig.set_titles("{col_name}",size = 20)
+      fig.set_xlabels(size = 20)
+      fig.set_ylabels(size = 20)
+      st.pyplot(fig)
  
-        fig = sns.lmplot(x='Recency', y='Monetary', data=df_rfm2, col='Label', hue='Label')
-        fig.set_titles("{col_name}", size = 20)
-        fig.set_xlabels(size = 20)
-        fig.set_ylabels(size = 20)
-        st.pyplot(fig)
+      fig = sns.lmplot(x='Recency', y='Monetary', data=df_rfm2, col='Label', hue='Label')
+      fig.set_titles("{col_name}", size = 20)
+      fig.set_xlabels(size = 20)
+      fig.set_ylabels(size = 20)
+      st.pyplot(fig)
         
 
-        fig = sns.lmplot(x='Monetary', y='Frequency', data=df_rfm2, col='Label', hue='Label')
-        fig.set_titles("{col_name}",size = 20)
-        fig.set_xlabels(size = 20)
-        fig.set_ylabels(size = 20)
-        st.pyplot(fig);
+      fig = sns.lmplot(x='Monetary', y='Frequency', data=df_rfm2, col='Label', hue='Label')
+      fig.set_titles("{col_name}",size = 20)
+      fig.set_xlabels(size = 20)
+      fig.set_ylabels(size = 20)
+      st.pyplot(fig);
        
 
 
 # pour client dilemme
-    st.markdown(" <br><br>", unsafe_allow_html=True)
-    if activation_function == "Client dilemme":
-        st.markdown("<h2 style='text-align: center;'>Analyse du comportement</h2>", unsafe_allow_html=True)
-        st.markdown("<br>", unsafe_allow_html=True)
+   st.markdown(" <br><br>", unsafe_allow_html=True)
+   if activation_function == "Client dilemme":
+      st.markdown("<h2 style='text-align: center;'>Analyse du comportement</h2>", unsafe_allow_html=True)
+      st.markdown("<br>", unsafe_allow_html=True)
         
-        col1, col2 = st.columns(2)
-        fig = plt.figure(figsize=(15,10))
-        with col1: 
-            fig = plt.figure(figsize=(15,10))
+      col1, col2 = st.columns(2)
+      fig = plt.figure(figsize=(15,10))
+      with col1:
+         fig = plt.figure(figsize=(15,10))
 
-            df_dilemme = df2[df2["Label"]=="Client dilemme"]
-            df_discount_dilemme_status = pd.crosstab(df_dilemme['Category'], df_dilemme['Regroupement_status'])
-            df_discount_dilemme = pd.crosstab(df_dilemme['Category'], df_dilemme['Discount_amount_euros'] ==0, normalize=0).round(2)
-            df_discount_dilemme.columns = ['Avec_remise', 'Sans_remise']
-            df_discount_dilemme['nb_commande'] = df_dilemme['Category'].value_counts()
-            df_discount_dilemme = df_discount_dilemme.merge(df_discount_dilemme_status, left_index=True, right_index=True)
+         df_dilemme = df2[df2["Label"]=="Client dilemme"]
+         df_discount_dilemme_status = pd.crosstab(df_dilemme['Category'], df_dilemme['Regroupement_status'])
+         df_discount_dilemme = pd.crosstab(df_dilemme['Category'], df_dilemme['Discount_amount_euros'] ==0, normalize=0).round(2)
+         df_discount_dilemme.columns = ['Avec_remise', 'Sans_remise']
+         df_discount_dilemme['nb_commande'] = df_dilemme['Category'].value_counts()
+         df_discount_dilemme = df_discount_dilemme.merge(df_discount_dilemme_status, left_index=True, right_index=True)
             
-            plt.plot(df_discount_dilemme.index, df_discount_dilemme['Avec_remise'])
-            plt.xticks(rotation=45, horizontalalignment='right', fontsize =30)
-            plt.yticks(fontsize =30)
-            plt.ylim(0,1)
-            plt.ylabel("Taux d'achats remisés", fontsize = 30, color="b")
-            plt.title("Impact des remises sur les achats", fontsize = 40, color="b")
-            st.pyplot(fig)
-        with col2 :
-            fig = plt.figure(figsize=(15,10))
+         plt.plot(df_discount_dilemme.index, df_discount_dilemme['Avec_remise'])
+         plt.xticks(rotation=45, horizontalalignment='right', fontsize =30)
+         plt.yticks(fontsize =30)
+         plt.ylim(0,1)
+         plt.ylabel("Taux d'achats remisés", fontsize = 30, color="b")
+         plt.title("Impact des remises sur les achats", fontsize = 40, color="b")
+         st.pyplot(fig)
+      with col2 :
+         fig = plt.figure(figsize=(15,10))
 
 
-            plt.bar(df_discount_dilemme.index, df_discount_dilemme['annulé'], label='annulé', color="#e31a1c")
-            plt.bar(df_discount_dilemme.index, df_discount_dilemme['finalisé'], bottom=df_discount_dilemme['annulé'],
+         plt.bar(df_discount_dilemme.index, df_discount_dilemme['annulé'], label='annulé', color="#e31a1c")
+         plt.bar(df_discount_dilemme.index, df_discount_dilemme['finalisé'], bottom=df_discount_dilemme['annulé'],
                                                 label='finalisé', color="#33a02c")
-            plt.xticks(rotation=45, horizontalalignment='right',fontsize =30)
-            plt.yticks(fontsize =30)
-            plt.ylabel('Volumes de commandes', color='b', fontsize=30)
-            plt.title("Volume de commandes", fontsize = 40, color ="b")
-            plt.legend(fontsize=20)
-            st.pyplot(fig)
+         plt.xticks(rotation=45, horizontalalignment='right',fontsize =30)
+         plt.yticks(fontsize =30)
+         plt.ylabel('Volumes de commandes', color='b', fontsize=30)
+         plt.title("Volume de commandes", fontsize = 40, color ="b")
+         plt.legend(fontsize=20)
+         st.pyplot(fig)
             
             
-        st.markdown(" <br><br>", unsafe_allow_html=True)
-        st.markdown("<p style = 'font-size : 22px; font-weight: bold'>Observations :</p>",unsafe_allow_html=True)
-        st.markdown("<p style = 'font-size : 17px;text-align: justify'>Leur volume d'achat est déjà important. Exception faite des mobiles et tablettes, ils sont peu sensibles aux promotions. Cependant on constate que leurs achats sont axés sur les articles de mode, de beauté, ainsi que des mobiles et tablettes.</p>",unsafe_allow_html=True)
-        st.markdown("<br>", unsafe_allow_html=True)
-        st.markdown("<p style = 'font-size : 22px; font-weight: bold'>Recommandations :</p>",unsafe_allow_html=True)
-        st.markdown("<p style = 'font-size : 17px;text-align: justify'>Notre but n’est pas de les fidéliser ni de changer leurs habitudes de consommation, mais d’augmenter leur nombre, ce qui permettra de générer un chiffre d’affaires plus important. Pour ce faire nous proposons de communiquer sur les articles à succès (articles de modes, beauté, mobiles et tablettes).</p>",unsafe_allow_html=True)
+      st.markdown(" <br><br>", unsafe_allow_html=True)
+      st.markdown("<p style = 'font-size : 22px; font-weight: bold'>Observations :</p>",unsafe_allow_html=True)
+      st.markdown("<p style = 'font-size : 17px;text-align: justify'>Leur volume d'achat est déjà important. Exception faite des mobiles et tablettes, ils sont peu sensibles aux promotions. Cependant on constate que leurs achats sont axés sur les articles de mode, de beauté, ainsi que des mobiles et tablettes.</p>",unsafe_allow_html=True)
+      st.markdown("<br>", unsafe_allow_html=True)
+      st.markdown("<p style = 'font-size : 22px; font-weight: bold'>Recommandations :</p>",unsafe_allow_html=True)
+      st.markdown("<p style = 'font-size : 17px;text-align: justify'>Notre but n’est pas de les fidéliser ni de changer leurs habitudes de consommation, mais d’augmenter leur nombre, ce qui permettra de générer un chiffre d’affaires plus important. Pour ce faire nous proposons de communiquer sur les articles à succès (articles de modes, beauté, mobiles et tablettes).</p>",unsafe_allow_html=True)
 
  
         
 # pour Top Customer
-    st.markdown(" <br>", unsafe_allow_html=True)
-    if activation_function == "Top Customer":
-        st.markdown("<h2 style='text-align: center;'>Analyse du comportement</h2>", unsafe_allow_html=True)
-        st.markdown("<br>", unsafe_allow_html=True)
-        df_top = df2[df2["Label"]=="Top Customer"]       
-        df_discount_top_status = pd.crosstab(df_top['Category'], df_top['Regroupement_status'])
+   st.markdown(" <br>", unsafe_allow_html=True)
+   if activation_function == "Top Customer":
+      st.markdown("<h2 style='text-align: center;'>Analyse du comportement</h2>", unsafe_allow_html=True)
+      st.markdown("<br>", unsafe_allow_html=True)
+      df_top = df2[df2["Label"]=="Top Customer"]       
+      df_discount_top_status = pd.crosstab(df_top['Category'], df_top['Regroupement_status'])
 
-        df_discount_top = pd.crosstab(df_top['Category'], df_top['Discount_amount_euros'] ==0, normalize=0).round(2)
-        df_discount_top.columns = ['Avec_remise', 'Sans_remise']
-        df_discount_top['nb_commande'] = df_top['Category'].value_counts()
-        df_discount_top = df_discount_top.merge(df_discount_top_status, left_index=True, right_index=True)
+      df_discount_top = pd.crosstab(df_top['Category'], df_top['Discount_amount_euros'] ==0, normalize=0).round(2)
+      df_discount_top.columns = ['Avec_remise', 'Sans_remise']
+      df_discount_top['nb_commande'] = df_top['Category'].value_counts()
+      df_discount_top = df_discount_top.merge(df_discount_top_status, left_index=True, right_index=True)
         
-        col1, col2 = st.columns(2)
-        fig = plt.figure(figsize=(15,10))
-        with col1: 
-            fig = plt.figure(figsize=(15,10))
-            plt.plot(df_discount_top.index, df_discount_top['Avec_remise'])
-            plt.xticks(rotation=45, horizontalalignment='right', fontsize =30)
-            plt.yticks(fontsize =30)
-            plt.ylim(0,1)
-            plt.ylabel("Taux d'achats remisés", fontsize = 30, color="b")
-            plt.title("Impact des remises sur les achats", fontsize = 40, color="b")
-            st.pyplot(fig)
-        with col2 :
-            fig = plt.figure(figsize=(15,10))
+      col1, col2 = st.columns(2)
+      fig = plt.figure(figsize=(15,10))
+      with col1:
+         fig = plt.figure(figsize=(15,10))
+         plt.plot(df_discount_top.index, df_discount_top['Avec_remise'])
+         plt.xticks(rotation=45, horizontalalignment='right', fontsize =30)
+         plt.yticks(fontsize =30)
+         plt.ylim(0,1)
+         plt.ylabel("Taux d'achats remisés", fontsize = 30, color="b")
+         plt.title("Impact des remises sur les achats", fontsize = 40, color="b")
+         st.pyplot(fig)
+      with col2 :
+         fig = plt.figure(figsize=(15,10))
          #st.markdown("Volume de commandes")
 
-            plt.bar(df_discount_top.index, df_discount_top['annulé'], label='annulé', color="#e31a1c")
-            plt.bar(df_discount_top.index, df_discount_top['finalisé'], bottom=df_discount_top['annulé'],
+         plt.bar(df_discount_top.index, df_discount_top['annulé'], label='annulé', color="#e31a1c")
+         plt.bar(df_discount_top.index, df_discount_top['finalisé'], bottom=df_discount_top['annulé'],
                                  label='finalisé', color="#33a02c")
-            plt.xticks(rotation=45, horizontalalignment='right',fontsize =30)
-            plt.yticks(fontsize =30)
-            plt.ylabel('Volumes de commandes', color='b', fontsize=30)
-            plt.title("Volume de commandes", fontsize = 40, color ="b")
-            plt.legend(fontsize=20)
-            st.pyplot(fig)    
-            st.markdown(" <br><br>", unsafe_allow_html=True)
+         plt.xticks(rotation=45, horizontalalignment='right',fontsize =30)
+         plt.yticks(fontsize =30)
+         plt.ylabel('Volumes de commandes', color='b', fontsize=30)
+         plt.title("Volume de commandes", fontsize = 40, color ="b")
+         plt.legend(fontsize=20)
+         st.pyplot(fig)    
+         st.markdown(" <br><br>", unsafe_allow_html=True)
     #Volume en net income
-        top1= df_top.groupby(df_top['Category']).agg({"Net_income_euros" : "sum"})
-        fig = plt.figure(figsize=(15,10))       
-        plt.bar(top1.index, top1["Net_income_euros"])
-        plt.xticks(rotation=45, horizontalalignment='right', fontsize =15)
-        plt.yticks(fontsize =15)
-        plt.ylabel("Chiffre d'affaires en K€")
-        plt.title("Chiffre d'affaires par Catégorie", fontsize = 20, color="b")
-        st.pyplot(fig)
-        st.markdown(" <br><br>", unsafe_allow_html=True)
-        st.markdown("<p style = 'font-size : 22px; font-weight: bold'>Observations :</p>",unsafe_allow_html=True)
-        st.markdown("<p style = 'font-size : 17px;text-align: justify'>Ce sont des clients qui présentent un profil de consommation homogéne sur la fréquence d'achat, la récence des visites et le montant des dépenses.</p>",unsafe_allow_html=True)   
+      top1= df_top.groupby(df_top['Category']).agg({"Net_income_euros" : "sum"})
+      fig = plt.figure(figsize=(15,10))
+      plt.bar(top1.index, top1["Net_income_euros"])
+      plt.xticks(rotation=45, horizontalalignment='right', fontsize =15)
+      plt.yticks(fontsize =15)
+      plt.ylabel("Chiffre d'affaires en K€")
+      plt.title("Chiffre d'affaires par Catégorie", fontsize = 20, color="b")
+      st.pyplot(fig)
+      st.markdown(" <br><br>", unsafe_allow_html=True)
+      st.markdown("<p style = 'font-size : 22px; font-weight: bold'>Observations :</p>",unsafe_allow_html=True)
+      st.markdown("<p style = 'font-size : 17px;text-align: justify'>Ce sont des clients qui présentent un profil de consommation homogéne sur la fréquence d'achat, la récence des visites et le montant des dépenses.</p>",unsafe_allow_html=True)
       
-        st.markdown("<br>", unsafe_allow_html=True)
-        st.markdown("<p style = 'font-size : 22px;font-weight: bold'>Recommandations :</p>",unsafe_allow_html=True)
-        st.markdown("<p style = 'font-size : 17px;text-align: justify'>Nous ne souhaitons pas de transformation de ces clients fidèles, réguliers et bons consommateurs.</p>",unsafe_allow_html=True)   
+      st.markdown("<br>", unsafe_allow_html=True)
+      st.markdown("<p style = 'font-size : 22px;font-weight: bold'>Recommandations :</p>",unsafe_allow_html=True)
+      st.markdown("<p style = 'font-size : 17px;text-align: justify'>Nous ne souhaitons pas de transformation de ces clients fidèles, réguliers et bons consommateurs.</p>",unsafe_allow_html=True)   
         
         
 # pour clientà surveiller
-    if activation_function == "Client à surveiller":
-        st.markdown("<h2 style='text-align: center;'>Analyse du comportement</h2>", unsafe_allow_html=True)
-        df_a_surveiller = df2[df2["Label"]=="Client à surveiller"]       
-        df_discount_a_surveiller_status = pd.crosstab(df_a_surveiller['Category'], df_a_surveiller['Regroupement_status'])
+   if activation_function == "Client à surveiller":
+      st.markdown("<h2 style='text-align: center;'>Analyse du comportement</h2>", unsafe_allow_html=True)
+      df_a_surveiller = df2[df2["Label"]=="Client à surveiller"]       
+      df_discount_a_surveiller_status = pd.crosstab(df_a_surveiller['Category'], df_a_surveiller['Regroupement_status'])
 
-        df_discount_a_surveiller = pd.crosstab(df_a_surveiller['Category'], df_a_surveiller['Discount_amount_euros'] ==0, normalize=0).round(2)
-        df_discount_a_surveiller.columns = ['Avec_remise', 'Sans_remise']
-        df_discount_a_surveiller['nb_commande'] = df_a_surveiller['Category'].value_counts()
-        df_discount_a_surveiller = df_discount_a_surveiller.merge(df_discount_a_surveiller_status, left_index=True, right_index=True)
-        st.markdown("<br>", unsafe_allow_html=True)
+      df_discount_a_surveiller = pd.crosstab(df_a_surveiller['Category'], df_a_surveiller['Discount_amount_euros'] ==0, normalize=0).round(2)
+      df_discount_a_surveiller.columns = ['Avec_remise', 'Sans_remise']
+      df_discount_a_surveiller['nb_commande'] = df_a_surveiller['Category'].value_counts()
+      df_discount_a_surveiller = df_discount_a_surveiller.merge(df_discount_a_surveiller_status, left_index=True, right_index=True)
+      st.markdown("<br>", unsafe_allow_html=True)
         
-        col1, col2 = st.columns(2)
-        fig = plt.figure(figsize=(15,10))
-        with col1: 
-            fig = plt.figure(figsize=(15,10))
-            plt.plot(df_discount_a_surveiller.index, df_discount_a_surveiller['Avec_remise'])
-            plt.xticks(rotation=45, horizontalalignment='right', fontsize =30)
-            plt.yticks(fontsize =30)
-            plt.ylim(0,1)
-            plt.ylabel("Taux d'achats remisés", fontsize = 30, color="b")
-            plt.title("Impact des remises sur les achats", fontsize = 40, color="b")
-            st.pyplot(fig)
-        with col2 :
-            fig = plt.figure(figsize=(15,10))
+      col1, col2 = st.columns(2)
+      fig = plt.figure(figsize=(15,10))
+      with col1:
+         fig = plt.figure(figsize=(15,10))
+         plt.plot(df_discount_a_surveiller.index, df_discount_a_surveiller['Avec_remise'])
+         plt.xticks(rotation=45, horizontalalignment='right', fontsize =30)
+         plt.yticks(fontsize =30)
+         plt.ylim(0,1)
+         plt.ylabel("Taux d'achats remisés", fontsize = 30, color="b")
+         plt.title("Impact des remises sur les achats", fontsize = 40, color="b")
+         st.pyplot(fig)
+      with col2:
+         fig = plt.figure(figsize=(15,10))
          #st.markdown("Volume de commandes")
 
-            plt.bar(df_discount_a_surveiller.index, df_discount_a_surveiller['annulé'], label='annulé', color="#e31a1c")
-            plt.bar(df_discount_a_surveiller.index, df_discount_a_surveiller['finalisé'], bottom=df_discount_a_surveiller['annulé'],
+         plt.bar(df_discount_a_surveiller.index, df_discount_a_surveiller['annulé'], label='annulé', color="#e31a1c")
+         plt.bar(df_discount_a_surveiller.index, df_discount_a_surveiller['finalisé'], bottom=df_discount_a_surveiller['annulé'],
                                  label='finalisé', color="#33a02c")
-            plt.xticks(rotation=45, horizontalalignment='right',fontsize =30)
-            plt.yticks(fontsize =30)
-            plt.ylabel('Volumes de commandes', color='b', fontsize=30)
-            plt.title("Volume de commandes", fontsize = 40, color ="b")
-            plt.legend(fontsize=20)
-            st.pyplot(fig)       
+         plt.xticks(rotation=45, horizontalalignment='right',fontsize =30)
+         plt.yticks(fontsize =30)
+         plt.ylabel('Volumes de commandes', color='b', fontsize=30)
+         plt.title("Volume de commandes", fontsize = 40, color ="b")
+         plt.legend(fontsize=20)
+         st.pyplot(fig)       
             
             
-        df_comparaison = df2.loc[(df2['Label']=='Client à surveiller') | (df2['Label']=='Top Customer')]
-        df_comparaison2 = pd.crosstab(df_comparaison['Category'], df_comparaison['Label'])
-        df_comparaison2 = df_comparaison2.reindex(df_comparaison['Category'].unique())
+      df_comparaison = df2.loc[(df2['Label']=='Client à surveiller') | (df2['Label']=='Top Customer')]
+      df_comparaison2 = pd.crosstab(df_comparaison['Category'], df_comparaison['Label'])
+      df_comparaison2 = df_comparaison2.reindex(df_comparaison['Category'].unique())
         
         
-        st.markdown("<br>", unsafe_allow_html=True)
-        fig=plt.figure(figsize=(10,7))
-        sns.countplot(df_comparaison["Category"], palette = "Paired", hue = df_comparaison["Label"])
-        plt.plot(df_comparaison['Category'].unique(), df_comparaison2['Client à surveiller'], c='#1f78b4')
-        plt.plot(df_comparaison['Category'].unique(), df_comparaison2['Top Customer'], c='#a6cee3')
-        plt.xticks(rotation=45, horizontalalignment="right")
-        plt.title("Comparaison entre les achats des clients à surveiller et des top customers", fontsize=20, color="b")
-        st.pyplot(fig)
+      st.markdown("<br>", unsafe_allow_html=True)
+      fig=plt.figure(figsize=(10,7))
+      sns.countplot(df_comparaison["Category"], palette = "Paired", hue = df_comparaison["Label"])
+      plt.plot(df_comparaison['Category'].unique(), df_comparaison2['Client à surveiller'], c='#1f78b4')
+      plt.plot(df_comparaison['Category'].unique(), df_comparaison2['Top Customer'], c='#a6cee3')
+      plt.xticks(rotation=45, horizontalalignment="right")
+      plt.title("Comparaison entre les achats des clients à surveiller et des top customers", fontsize=20, color="b")
+      st.pyplot(fig)
         
         
-        st.markdown(" <br><br>", unsafe_allow_html=True)
-        st.markdown("<p style = 'font-size : 22px; font-weight: bold'>Observations :</p>",unsafe_allow_html=True)
-        st.markdown("<p style = 'font-size : 17px;text-align: justify'>La comparaison avec les comportements d'achat des top customers nous amène à penser qu'ils ont les mêmes profils de consommation. Exception faite des mobiles et tablettes qui présentent des volumes de ventes et un taux d’annulation particulièrement élevés, les achats s’orientent vers d’autres catégories peu sujettes à promotions (mens’ fashion et Soghaat).</p>",unsafe_allow_html=True)
-        st.markdown("<br>", unsafe_allow_html=True)
-        st.markdown("<p style = 'font-size : 22px;font-weight: bold'>Recommandations :</p>",unsafe_allow_html=True)
-        st.markdown("<p style = 'font-size : 17px;text-align: justify'>Nous proposons ainsi de communiquer sur des produits d’appels, et des nouveautés sur ces catégories afin de conquérir ces clients.</p>",unsafe_allow_html=True)
+      st.markdown(" <br><br>", unsafe_allow_html=True)
+      st.markdown("<p style = 'font-size : 22px; font-weight: bold'>Observations :</p>",unsafe_allow_html=True)
+      st.markdown("<p style = 'font-size : 17px;text-align: justify'>La comparaison avec les comportements d'achat des top customers nous amène à penser qu'ils ont les mêmes profils de consommation. Exception faite des mobiles et tablettes qui présentent des volumes de ventes et un taux d’annulation particulièrement élevés, les achats s’orientent vers d’autres catégories peu sujettes à promotions (mens’ fashion et Soghaat).</p>",unsafe_allow_html=True)
+      st.markdown("<br>", unsafe_allow_html=True)
+      st.markdown("<p style = 'font-size : 22px;font-weight: bold'>Recommandations :</p>",unsafe_allow_html=True)
+      st.markdown("<p style = 'font-size : 17px;text-align: justify'>Nous proposons ainsi de communiquer sur des produits d’appels, et des nouveautés sur ces catégories afin de conquérir ces clients.</p>",unsafe_allow_html=True)
     
         
 
 # pour client à potentiel élevé
-    if activation_function == "Client à potentiel élevé":
-        st.markdown("<h2 style='text-align: center;'>Analyse du comportement</h2>", unsafe_allow_html=True)
-        st.markdown(" <br><br>", unsafe_allow_html=True)
-        df_potentiel_eleve = df2[df2["Label"]=="Client à potentiel élevé"]
-        df_discount_potentiel_status = pd.crosstab(df_potentiel_eleve['Category'], df_potentiel_eleve['Regroupement_status'])
+   if activation_function == "Client à potentiel élevé":
+      st.markdown("<h2 style='text-align: center;'>Analyse du comportement</h2>", unsafe_allow_html=True)
+      st.markdown(" <br><br>", unsafe_allow_html=True)
+      df_potentiel_eleve = df2[df2["Label"]=="Client à potentiel élevé"]
+      df_discount_potentiel_status = pd.crosstab(df_potentiel_eleve['Category'], df_potentiel_eleve['Regroupement_status'])
 
-        df_discount_potentiel = pd.crosstab(df_potentiel_eleve['Category'], df_potentiel_eleve['Discount_amount'] ==0, normalize=0).round(2)
-        df_discount_potentiel.columns = ['Avec_remise', 'Sans_remise']
-        df_discount_potentiel['nb_commande'] = df_potentiel_eleve['Category'].value_counts()
-        df_discount_potentiel = df_discount_potentiel.merge(df_discount_potentiel_status, left_index=True, right_index=True)
+      df_discount_potentiel = pd.crosstab(df_potentiel_eleve['Category'], df_potentiel_eleve['Discount_amount'] ==0, normalize=0).round(2)
+      df_discount_potentiel.columns = ['Avec_remise', 'Sans_remise']
+      df_discount_potentiel['nb_commande'] = df_potentiel_eleve['Category'].value_counts()
+      df_discount_potentiel = df_discount_potentiel.merge(df_discount_potentiel_status, left_index=True, right_index=True)
 
-        col1, col2 = st.columns(2)
-        fig = plt.figure(figsize=(15,10))
-        with col1: 
-            fig = plt.figure(figsize=(15,10))
-            plt.plot(df_discount_potentiel.index, df_discount_potentiel['Avec_remise'])
-            plt.xticks(rotation=45, horizontalalignment='right', fontsize =30)
-            plt.yticks(fontsize =30)
-            plt.ylim(0,1)
-            plt.ylabel("Taux d'achats remisés", fontsize = 30, color="b")
-            plt.title("Impact des remises sur les achats", fontsize = 40, color="b")
-            st.pyplot(fig)
-        with col2 :
-            fig = plt.figure(figsize=(15,10))
-
-
-            plt.bar(df_discount_potentiel.index, df_discount_potentiel['annulé'], label='annulé', color="#e31a1c")
-            plt.bar(df_discount_potentiel.index, df_discount_potentiel['finalisé'], bottom=df_discount_potentiel['annulé'],
+      col1, col2 = st.columns(2)
+      fig = plt.figure(figsize=(15,10))
+      with col1:
+         fig = plt.figure(figsize=(15,10))
+         plt.plot(df_discount_potentiel.index, df_discount_potentiel['Avec_remise'])
+         plt.xticks(rotation=45, horizontalalignment='right', fontsize =30)
+         plt.yticks(fontsize =30)
+         plt.ylim(0,1)
+         plt.ylabel("Taux d'achats remisés", fontsize = 30, color="b")
+         plt.title("Impact des remises sur les achats", fontsize = 40, color="b")
+         st.pyplot(fig)
+      with col2 :
+         fig = plt.figure(figsize=(15,10))
+         plt.bar(df_discount_potentiel.index, df_discount_potentiel['annulé'], label='annulé', color="#e31a1c")
+         plt.bar(df_discount_potentiel.index, df_discount_potentiel['finalisé'], bottom=df_discount_potentiel['annulé'],
                                         label='finalisé', color="#33a02c")
-            plt.xticks(rotation=45, horizontalalignment='right',fontsize =30)
-            plt.yticks(fontsize =30)
-            plt.ylabel('Volumes de commandes', color='b', fontsize=30)
-            plt.title("Volume de commandes", fontsize = 40, color ="b")
-            plt.legend(fontsize=20)
-            st.pyplot(fig)  
+         plt.xticks(rotation=45, horizontalalignment='right',fontsize =30)
+         plt.yticks(fontsize =30)
+         plt.ylabel('Volumes de commandes', color='b', fontsize=30)
+         plt.title("Volume de commandes", fontsize = 40, color ="b")
+         plt.legend(fontsize=20)
+         st.pyplot(fig)  
             
-        st.markdown(" <br><br>", unsafe_allow_html=True)
-        st.markdown("<p style = 'font-size : 22px; font-weight: bold'>Observations :</p>",unsafe_allow_html=True)
-        st.markdown("<p style = 'font-size : 17px;text-align: justify'>On constate que le volume des ventes des clients à potentiel élevés est moins important que celui des clients dilemmes.On remarque aussi qu'ils sont sensibles aux promotions.</p>",unsafe_allow_html=True)
-        st.markdown("<br>", unsafe_allow_html=True)
-        st.markdown("<p style = 'font-size : 22px;font-weight: bold'>Recommandations :</p>",unsafe_allow_html=True)
-        st.markdown("<p style = 'font-size : 17px;text-align: justify'>Nous souhaitons augmenter leur consommation afin qu’ils puissent devenir des Top Customer. Compte tenu de leur sensibilité aux promotions, une piste serait de leur proposer des opérations promotionnelles exclusives et ciblées afin de stimuler leurs achats.</p>",unsafe_allow_html=True)
+      st.markdown(" <br><br>", unsafe_allow_html=True)
+      st.markdown("<p style = 'font-size : 22px; font-weight: bold'>Observations :</p>",unsafe_allow_html=True)
+      st.markdown("<p style = 'font-size : 17px;text-align: justify'>On constate que le volume des ventes des clients à potentiel élevés est moins important que celui des clients dilemmes.On remarque aussi qu'ils sont sensibles aux promotions.</p>",unsafe_allow_html=True)
+      st.markdown("<br>", unsafe_allow_html=True)
+      st.markdown("<p style = 'font-size : 22px;font-weight: bold'>Recommandations :</p>",unsafe_allow_html=True)
+      st.markdown("<p style = 'font-size : 17px;text-align: justify'>Nous souhaitons augmenter leur consommation afin qu’ils puissent devenir des Top Customer. Compte tenu de leur sensibilité aux promotions, une piste serait de leur proposer des opérations promotionnelles exclusives et ciblées afin de stimuler leurs achats.</p>",unsafe_allow_html=True)
        
 # pour client Sans potentiel Stratégique
-    if activation_function == "Client sans potentiel stratégique":
-      
-        st.markdown("<h2 style='text-align: center;'>Analyse du comportement</h2>", unsafe_allow_html=True) 
-        st.markdown("<br>", unsafe_allow_html=True)  
+   if activation_function == "Client sans potentiel stratégique":
+      st.markdown("<h2 style='text-align: center;'>Analyse du comportement</h2>", unsafe_allow_html=True) 
+      st.markdown("<br>", unsafe_allow_html=True)  
             
-        df_sans_potentiel = df2[df2["Label"]=="Client sans potentiel stratégique"]
-        df_discount_sans_potentiel_status = pd.crosstab(df_sans_potentiel['Category'], df_sans_potentiel['Regroupement_status'])
-        df_discount_sans_potentiel = pd.crosstab(df_sans_potentiel['Category'],df_sans_potentiel['Discount_amount'] ==0, normalize=0).round(2)
-        df_discount_sans_potentiel.columns = ['Avec_remise', 'Sans_remise']
-        df_discount_sans_potentiel['nb_commande'] = df_sans_potentiel['Category'].value_counts()
-        df_discount_sans_potentiel = df_discount_sans_potentiel.merge(df_discount_sans_potentiel_status, left_index=True, right_index=True)
+      df_sans_potentiel = df2[df2["Label"]=="Client sans potentiel stratégique"]
+      df_discount_sans_potentiel_status = pd.crosstab(df_sans_potentiel['Category'], df_sans_potentiel['Regroupement_status'])
+      df_discount_sans_potentiel = pd.crosstab(df_sans_potentiel['Category'],df_sans_potentiel['Discount_amount'] ==0, normalize=0).round(2)
+      df_discount_sans_potentiel.columns = ['Avec_remise', 'Sans_remise']
+      df_discount_sans_potentiel['nb_commande'] = df_sans_potentiel['Category'].value_counts()
+      df_discount_sans_potentiel = df_discount_sans_potentiel.merge(df_discount_sans_potentiel_status, left_index=True, right_index=True)
 
-        col1, col2 = st.columns(2)
-        fig = plt.figure(figsize=(15,10))
-        with col1: 
-            fig = plt.figure(figsize=(15,10))
-            plt.plot(df_discount_sans_potentiel.index, df_discount_sans_potentiel['Avec_remise'])
-            plt.xticks(rotation=45, horizontalalignment='right', fontsize =30)
-            plt.yticks(fontsize =30)
-            plt.ylim(0,1)
-            plt.ylabel("Taux d'achats remisés", fontsize = 30, color="b")
-            plt.title("Impact des remises sur les achats", fontsize = 40, color="b")
-            st.pyplot(fig)
-        with col2 :
-            fig = plt.figure(figsize=(15,10))
+      col1, col2 = st.columns(2)
+      fig = plt.figure(figsize=(15,10))
+      with col1:
+         fig = plt.figure(figsize=(15,10))
+         plt.plot(df_discount_sans_potentiel.index, df_discount_sans_potentiel['Avec_remise'])
+         plt.xticks(rotation=45, horizontalalignment='right', fontsize =30)
+         plt.yticks(fontsize =30)
+         plt.ylim(0,1)
+         plt.ylabel("Taux d'achats remisés", fontsize = 30, color="b")
+         plt.title("Impact des remises sur les achats", fontsize = 40, color="b")
+         st.pyplot(fig)
+      with col2:
+         fig = plt.figure(figsize=(15,10))
 
-            plt.bar(df_discount_sans_potentiel.index, df_discount_sans_potentiel['annulé'], label='annulé', color="#e31a1c")
-            plt.bar(df_discount_sans_potentiel.index, df_discount_sans_potentiel['finalisé'], bottom=df_discount_sans_potentiel['annulé'],
+         plt.bar(df_discount_sans_potentiel.index, df_discount_sans_potentiel['annulé'], label='annulé', color="#e31a1c")
+         plt.bar(df_discount_sans_potentiel.index, df_discount_sans_potentiel['finalisé'], bottom=df_discount_sans_potentiel['annulé'],
                                         label='finalisé', color="#33a02c")
-            plt.xticks(rotation=45, horizontalalignment='right',fontsize =30)
-            plt.yticks(fontsize =30)
-            plt.ylabel('Volumes de commandes', color='b', fontsize=30)
-            plt.title("Volume de commandes", fontsize = 40, color ="b")
-            plt.legend(fontsize=20)
-            st.pyplot(fig)        
-        st.markdown(" <br><br>", unsafe_allow_html=True)
-        st.markdown("<p style = 'font-size : 22px; font-weight: bold'>Observations :</p>",unsafe_allow_html=True)
-        st.markdown("<p style = 'font-size : 17px;text-align: justify'>Client qui n'est pas venu récemment, n'est pas régulier, donc n'a aucun intérêt stratégique, peu importe le montant de ses achats.</p>",unsafe_allow_html=True)
-        st.markdown("<br>", unsafe_allow_html=True)
-        st.markdown("<p style = 'font-size : 22px;font-weight: bold'>Recommandations :</p>",unsafe_allow_html=True)
-        st.markdown("<p style = 'font-size : 17px;text-align: justify'>Il est complexe d'établir des préconnisations pour ce cluster sur lequel nous ne disposons pas encore d'assez de données au niveau de la récence.</p>",unsafe_allow_html=True)
+         plt.xticks(rotation=45, horizontalalignment='right',fontsize =30)
+         plt.yticks(fontsize =30)
+         plt.ylabel('Volumes de commandes', color='b', fontsize=30)
+         plt.title("Volume de commandes", fontsize = 40, color ="b")
+         plt.legend(fontsize=20)
+         st.pyplot(fig)        
+      st.markdown(" <br><br>", unsafe_allow_html=True)
+      st.markdown("<p style = 'font-size : 22px; font-weight: bold'>Observations :</p>",unsafe_allow_html=True)
+      st.markdown("<p style = 'font-size : 17px;text-align: justify'>Client qui n'est pas venu récemment, n'est pas régulier, donc n'a aucun intérêt stratégique, peu importe le montant de ses achats.</p>",unsafe_allow_html=True)
+      st.markdown("<br>", unsafe_allow_html=True)
+      st.markdown("<p style = 'font-size : 22px;font-weight: bold'>Recommandations :</p>",unsafe_allow_html=True)
+      st.markdown("<p style = 'font-size : 17px;text-align: justify'>Il est complexe d'établir des préconnisations pour ce cluster sur lequel nous ne disposons pas encore d'assez de données au niveau de la récence.</p>",unsafe_allow_html=True)
 else:
+   st.markdown("<h2 style='font-weight:lighter; text-align: center; font-size: 60px;text-shadow: -1px -1px #000, 1px 1px #000, -3px 0 4px #000;'>Conclusion</h2>", unsafe_allow_html=True)
+   st.markdown("<p style = 'font-size : 17px;text-align: justify'><br><br>Notre modèle nous apparait comme concret, flexible et personnalisable à volonté. Par ailleurs il reste relativement simple à appliquer et mettre en œuvre au sein d’entreprises de divers secteurs.<br><br>La démarche appliquée et le modèle qui en résulte ne se limitent pas à la seule application qui en est faite ici. Il est tout à fait possible de l’adapter à de nombreux autres sujets (classification en trois composantes différentes de celles de la RFM).<br><br></p>",unsafe_allow_html=True)
+   st.markdown("<p style = 'font-size : 17px;text-align: justify;font-weight: bold'>Il serait possible d’améliorer la méthode d’analyse proposée en comparant :<br></p>",unsafe_allow_html=True)
 
-    st.markdown("<h2 style='font-weight:lighter; text-align: center; font-size: 60px;text-shadow: -1px -1px #000, 1px 1px #000, -3px 0 4px #000;'>Conclusion</h2>", unsafe_allow_html=True)
-    st.markdown("<p style = 'font-size : 17px;text-align: justify'><br><br>Notre modèle nous apparait comme concret, flexible et personnalisable à volonté. Par ailleurs il reste relativement simple à appliquer et mettre en œuvre au sein d’entreprises de divers secteurs.<br><br>La démarche appliquée et le modèle qui en résulte ne se limitent pas à la seule application qui en est faite ici. Il est tout à fait possible de l’adapter à de nombreux autres sujets (classification en trois composantes différentes de celles de la RFM).<br><br></p>",unsafe_allow_html=True)
-    st.markdown("<p style = 'font-size : 17px;text-align: justify;font-weight: bold'>Il serait possible d’améliorer la méthode d’analyse proposée en comparant :<br></p>",unsafe_allow_html=True)
 
-
-    #st.write("The following list won’t indent no matter what I try:")
-    st.markdown("- Évolution chronologique des clusters")
-    st.markdown("- Exploitation d'autres composantes (non exploitées à date)")
-    st.markdown("- Perfectionnement des data visualisations")
-    st.markdown(''' <style> [data-testid="stMarkdownContainer"] ul{     
-        padding-left:40px;        
-        } </style> ''', unsafe_allow_html=True)
+   #st.write("The following list won’t indent no matter what I try:")
+   st.markdown("- Évolution chronologique des clusters")
+   st.markdown("- Exploitation d'autres composantes (non exploitées à date)")
+   st.markdown("- Perfectionnement des data visualisations")
+   st.markdown(''' <style> [data-testid="stMarkdownContainer"] ul{padding-left:40px;} </style> ''', unsafe_allow_html=True)
     
                    
+
 
 
 
