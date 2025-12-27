@@ -28,7 +28,6 @@ html, body, [class*="css"]  {
 sns.set_theme()
 colors =['#0173b2', '#de8f05', '#029e73', '#d55e00', '#8172b3', '#ca9161', '#c44e52', '#949494', '#ece133', '#56b4e9']
 
-
 sns.set_palette(sns.color_palette(colors))
 c =sns.color_palette(colors)
 
@@ -40,24 +39,23 @@ page = st.sidebar.radio("aller vers", pages)
 
 # PAGE INTRODUCTION
 if page == pages[0]:
-# "background-image:url(images/background-h1-city.jpg)"
-    # TITRE
-    st.markdown("<h1 style='text-align: center; font-family:cursive ;color: #dc5534;font-size: 180px;text-shadow: -1px -1px #dc5534, 1px 1px #a00, -3px 0 4px #dc5534;'>RFM</h1>", unsafe_allow_html=True)
-    st.markdown("<h1 style='text-align: center; font-family:cursive ;color: #dc5534;font-size: 20px;'>(Recency, Frequency,Monetary)</h1>", unsafe_allow_html=True)
-    st.markdown(" <br><br>", unsafe_allow_html=True)  
-    st.markdown(" <br>", unsafe_allow_html=True)
-    st.image("logo_rfm2.png")
-    st.markdown(" <br><br><br><br><br><br><br>", unsafe_allow_html=True)    
-    
-    
-    st.markdown("<h2 style='font-weight:lighter; text-align: center; font-size: 60px;text-shadow: -1px -1px #000, 1px 1px #000, -3px 0 4px #000;'>Preprocessing</h2>", unsafe_allow_html=True) 
-
-    st.title("")
-  
-    st.markdown("<p style = 'font-size : 22px'>DataFrame Originel <a href =https://www.kaggle.com/zusmani/pakistans-largest-ecommerce-dataset>RFM</a></p>",unsafe_allow_html=True)
+   # "background-image:url(images/background-h1-city.jpg)"
+   # TITRE
+   st.markdown("<h1 style='text-align: center; font-family:cursive ;color: #dc5534;font-size: 180px;text-shadow: -1px -1px #dc5534, 1px 1px #a00, -3px 0 4px #dc5534;'>RFM</h1>", unsafe_allow_html=True)
+   st.markdown("<h1 style='text-align: center; font-family:cursive ;color: #dc5534;font-size: 20px;'>(Recency, Frequency,Monetary)</h1>", unsafe_allow_html=True)
+   st.markdown(" <br><br>", unsafe_allow_html=True)
+   st.markdown(" <br>", unsafe_allow_html=True)
+   st.image("logo_rfm2.png")
+   st.markdown(" <br><br><br><br><br><br><br>", unsafe_allow_html=True)
    
-    # url = "https://drive.google.com/uc?export=download&id=1gWKM0KgTq_PxFYQpMtB78EHmwszOdses"
-    # df1 = pd.read_csv(url)
+   st.markdown("<h2 style='font-weight:lighter; text-align: center; font-size: 60px;text-shadow: -1px -1px #000, 1px 1px #000, -3px 0 4px #000;'>Preprocessing</h2>", unsafe_allow_html=True)
+   
+   st.title("")
+  
+   st.markdown("<p style = 'font-size : 22px'>DataFrame Originel <a href =https://www.kaggle.com/zusmani/pakistans-largest-ecommerce-dataset>RFM</a></p>",unsafe_allow_html=True)
+   
+   # url = "https://drive.google.com/uc?export=download&id=1gWKM0KgTq_PxFYQpMtB78EHmwszOdses"
+   # df1 = pd.read_csv(url)
 
 
    # Chemin vers le zip dans ton repo
@@ -646,6 +644,7 @@ else:
         } </style> ''', unsafe_allow_html=True)
     
                    
+
 
 
 
