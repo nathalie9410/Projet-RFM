@@ -58,11 +58,27 @@ if page == pages[0]:
    # df1 = pd.read_csv(url)
 
 
+#   # Chemin vers le zip dans ton repo
+ #  zip_path = "datasets.zip"
+  # csv_name = "Pakistan Largest Ecommerce Dataset.csv"
+#
+ #  with zipfile.ZipFile(zip_path) as z:
+  #    with z.open(csv_name) as f:
+   #      df1 = pd.read_csv(
+    #        f,
+     #       low_memory=False,
+      #      na_values=[' ', '\\N', 'NaN ']
+       #  )
+
    # Chemin vers le zip dans ton repo
    zip_path = "datasets.zip"
-   csv_name = "Pakistan Largest Ecommerce Dataset.csv"
 
    with zipfile.ZipFile(zip_path) as z:
+      # On récupère automatiquement le nom du fichier .csv dans le zip
+      csv_files = [name for name in z.namelist() if name.lower().endswith(".csv")]
+      st.write("Fichiers trouvés dans le zip :", csv_files)  # debug, optionnel
+      # On prend le premier .csv trouvé
+      csv_name = csv_files[0]
       with z.open(csv_name) as f:
          df1 = pd.read_csv(
             f,
@@ -631,6 +647,7 @@ else:
    st.markdown(''' <style> [data-testid="stMarkdownContainer"] ul{padding-left:40px;} </style> ''', unsafe_allow_html=True)
     
                    
+
 
 
 
