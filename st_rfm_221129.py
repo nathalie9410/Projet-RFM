@@ -61,177 +61,172 @@ if page == pages[0]:
 
 
    # Chemin vers le zip dans ton repo
-zip_path = "datasets.zip"
-csv_name = "Pakistan Largest Ecommerce Dataset.csv"
+   zip_path = "datasets.zip"
+   csv_name = "Pakistan Largest Ecommerce Dataset.csv"
 
-with zipfile.ZipFile(zip_path) as z:
-   with z.open(csv_name) as f:
-      df1 = pd.read_csv(
-         f,
-         low_memory=False,
-         na_values=[' ', '\\N', 'NaN ']
-      )
+   with zipfile.ZipFile(zip_path) as z:
+      with z.open(csv_name) as f:
+         df1 = pd.read_csv(
+            f,
+            low_memory=False,
+            na_values=[' ', '\\N', 'NaN ']
+         )
 
    
-    #df1= pd.read_csv("Pakistan Largest Ecommerce Dataset.csv")
+   #df1= pd.read_csv("Pakistan Largest Ecommerce Dataset.csv")
 
-    st.dataframe(df1.head())
-    st.markdown(" <br>", unsafe_allow_html=True)
+   st.dataframe(df1.head())
+   st.markdown(" <br>", unsafe_allow_html=True)
     
-    st.markdown("<p style = 'font-size : 22px'>DataFrame Nettoyé</p>",unsafe_allow_html=True)
-    df= pd.read_csv("preprocessing.csv")
-    hide_dataframe_row_index = """
-            <style>
-            .row_heading.level0 {display:none}
-            .blank {display:none}
-            </style>
-            """
-    st.markdown(hide_dataframe_row_index, unsafe_allow_html=True)
-    st.dataframe(df.head())
-    st.markdown(" <br><br>", unsafe_allow_html=True)
+   st.markdown("<p style = 'font-size : 22px'>DataFrame Nettoyé</p>",unsafe_allow_html=True)
+   df= pd.read_csv("preprocessing.csv")
+   hide_dataframe_row_index = """
+         <style>
+         .row_heading.level0 {display:none}
+         .blank {display:none}
+         </style>
+         """
+   st.markdown(hide_dataframe_row_index, unsafe_allow_html=True)
+   st.dataframe(df.head())
+   st.markdown(" <br><br>", unsafe_allow_html=True)
     
     
 
-    st.markdown("<h2 style='font-weight:lighter; text-align: center; font-size: 60px;text-shadow: -1px -1px #000, 1px 1px #000, -3px 0 4px #000;'>Story Telling</h2>", unsafe_allow_html=True)
-    st.title("")
-    st.markdown("<h4 style='text-align: center;'>Analyse de la relation entre les différentes variables numériques</h4>", unsafe_allow_html=True)
-    fig = plt.figure()
-    sns.heatmap(df.corr(), annot=True, center=0, cmap= "magma", annot_kws={"fontsize":8}, fmt=".2f")
-    st.pyplot(fig);
-    st.markdown("<p style = 'font-size : 17px;text-align: justify'>Relation de corrélation entre « Net_income_euros » et « Price_euros » uniquement.</p>",unsafe_allow_html=True)
-    st.markdown(" <br><br><br><br>", unsafe_allow_html=True)
+   st.markdown("<h2 style='font-weight:lighter; text-align: center; font-size: 60px;text-shadow: -1px -1px #000, 1px 1px #000, -3px 0 4px #000;'>Story Telling</h2>", unsafe_allow_html=True)
+   st.title("")
+   st.markdown("<h4 style='text-align: center;'>Analyse de la relation entre les différentes variables numériques</h4>", unsafe_allow_html=True)
+   fig = plt.figure()
+   sns.heatmap(df.corr(), annot=True, center=0, cmap= "magma", annot_kws={"fontsize":8}, fmt=".2f")
+   st.pyplot(fig);
+   st.markdown("<p style = 'font-size : 17px;text-align: justify'>Relation de corrélation entre « Net_income_euros » et « Price_euros » uniquement.</p>",unsafe_allow_html=True)
+   st.markdown(" <br><br><br><br>", unsafe_allow_html=True)
     
     
-# évolution de la variable status   
-    st.markdown("<h4 style='text-align: center;'>Évolution du statut des commandes</h4>", unsafe_allow_html=True) 
-    st.markdown(" <br>", unsafe_allow_html=True)    
+   # évolution de la variable status   
+   st.markdown("<h4 style='text-align: center;'>Évolution du statut des commandes</h4>", unsafe_allow_html=True) 
+   st.markdown(" <br>", unsafe_allow_html=True)    
    
-    annees = df['Year'].unique()
-    colors =['#0173b2', '#de8f05', '#029e73', '#d55e00', '#8172b3', '#ca9161', '#c44e52', '#949494', '#ece133', '#56b4e9']
-    fig, axes = plt.subplots(2, 3, figsize=(20,14), squeeze=False)
+   annees = df['Year'].unique()
+   colors =['#0173b2', '#de8f05', '#029e73', '#d55e00', '#8172b3', '#ca9161', '#c44e52', '#949494', '#ece133', '#56b4e9']
+   fig, axes = plt.subplots(2, 3, figsize=(20,14), squeeze=False)
     
-    for i in range(3):
-        ax = axes[0,i]
-        sns.countplot(df[df['Year']==annees[i]]['Regroupement_status'], palette=colors, ax=ax)
-        labels = ax.get_xticklabels()
-        plt.setp(labels, rotation=45, horizontalalignment='right')
-        ax.set_title(('{}').format(annees[i]), fontsize=20, color='b')
-        ax.set_ylim(0,32000)
-        ax.set_ylabel("Nbre de commandes")
-        for p in ax.patches:
-            ax.annotate('{}'.format(p.get_height()), (p.get_x() + 0.3, p.get_height() + 1))    
+   for i in range(3):
+      ax = axes[0,i]
+      sns.countplot(df[df['Year']==annees[i]]['Regroupement_status'], palette=colors, ax=ax)
+      labels = ax.get_xticklabels()
+      plt.setp(labels, rotation=45, horizontalalignment='right')
+      ax.set_title(('{}').format(annees[i]), fontsize=20, color='b')
+      ax.set_ylim(0,32000)
+      ax.set_ylabel("Nbre de commandes")
+      for p in ax.patches:
+         ax.annotate('{}'.format(p.get_height()), (p.get_x() + 0.3, p.get_height() + 1))    
    
-        ax = axes[1,i]    
-        ax.pie(df[df['Year']==annees[i]]['Regroupement_status'].value_counts(), 
-                    labels=df[df['Year']==annees[i]]['Regroupement_status'].unique(),
-                    autopct='%1.1f%%', shadow=True, startangle=90, colors = colors)
-    fig.suptitle('Evolution du statut des commandes', fontsize=30, color='b', y=0.98)
-    plt.tight_layout()
+   ax = axes[1,i]    
+   ax.pie(df[df['Year']==annees[i]]['Regroupement_status'].value_counts(), labels=df[df['Year']==annees[i]]['Regroupement_status'].unique(),autopct='%1.1f%%', shadow=True, startangle=90, colors = colors)
+   fig.suptitle('Evolution du statut des commandes', fontsize=30, color='b', y=0.98)
+   plt.tight_layout()
     
-    def make_space_above(axes, topmargin=1):
-        """ increase figure size to make topmargin (in inches) space for 
-            titles, without changing the axes sizes"""
-        fig = axes.flatten()[0].figure
-        s = fig.subplotpars
-        w, h = fig.get_size_inches()
-        figh = h - (1-s.top)*h  + topmargin
-        fig.subplots_adjust(bottom=s.bottom*h/figh, top=1-topmargin/figh)
-        fig.set_figheight(figh)
-    make_space_above(axes, topmargin=2)
-    st.pyplot(fig);
+   def make_space_above(axes, topmargin=1):
+      """ increase figure size to make topmargin (in inches) space for titles, without changing the axes sizes"""
+      fig = axes.flatten()[0].figure
+      s = fig.subplotpars
+      w, h = fig.get_size_inches()
+      figh = h - (1-s.top)*h  + topmargin
+      fig.subplots_adjust(bottom=s.bottom*h/figh, top=1-topmargin/figh)
+      fig.set_figheight(figh)
+   make_space_above(axes, topmargin=2)
+   st.pyplot(fig);
     
-    st.markdown("<p style = 'font-size : 17px;text-align: justify'>Evolution négative des commandes finalisées sur la période.<br>Taux moyen d'annulation: 35.63%</p>",unsafe_allow_html=True)
+   st.markdown("<p style = 'font-size : 17px;text-align: justify'>Evolution négative des commandes finalisées sur la période.<br>Taux moyen d'annulation: 35.63%</p>",unsafe_allow_html=True)
     
     
-# évolution de la variable moyens de paiement    
+   # évolution de la variable moyens de paiement    
 
-    st.markdown(" <br><br><br><br>", unsafe_allow_html=True)
+   st.markdown(" <br><br><br><br>", unsafe_allow_html=True)
         
-    st.markdown("<h4 style='text-align: center;'>Évolution des moyens de paiement</h4>", unsafe_allow_html=True)
+   st.markdown("<h4 style='text-align: center;'>Évolution des moyens de paiement</h4>", unsafe_allow_html=True)
 
 
-    annees = df['Year'].unique()
+   annees = df['Year'].unique()
     
-    colors = ['#0173b2', '#de8f05', '#029e73', '#d55e00', '#8172b3']
+   colors = ['#0173b2', '#de8f05', '#029e73', '#d55e00', '#8172b3']
 
-    labels = ['cod', 'paiement immédiat', 'Paiement en plusieurs fois', 'voucher','portefeuille en ligne']
-    colors1 ={'cod':'#0173b2','paiement immédiat':'#de8f05','Paiement en plusieurs fois':'#029e73','voucher':'#d55e00','portefeuille en ligne':'#8172b3'}
-    fig, axes = plt.subplots(2, 3, figsize=(30,20), squeeze=False)
+   labels = ['cod', 'paiement immédiat', 'Paiement en plusieurs fois', 'voucher','portefeuille en ligne']
+   colors1 ={'cod':'#0173b2','paiement immédiat':'#de8f05','Paiement en plusieurs fois':'#029e73','voucher':'#d55e00','portefeuille en ligne':'#8172b3'}
+   fig, axes = plt.subplots(2, 3, figsize=(30,20), squeeze=False)
     
-    for i in range(3):
-        ax = axes[0,i]
-        sns.countplot(df[df['Year']==annees[i]]['Regroupement_payment_method'], palette=colors1, ax=ax)
-        xlabel = ax.get_xticklabels()
-        ylabel = ax.get_yticklabels()
-        plt.setp(xlabel, rotation=45, horizontalalignment='right', fontsize = 20)
-        plt.setp(ylabel,fontsize = 20)
-        ax.set_title(('{}').format(annees[i]), fontsize=30, color='b')
-        ax.set_ylabel("")
-        ax.set_ylim(0,32000)
+   for i in range(3):
+      ax = axes[0,i]
+      sns.countplot(df[df['Year']==annees[i]]['Regroupement_payment_method'], palette=colors1, ax=ax)
+      xlabel = ax.get_xticklabels()
+      ylabel = ax.get_yticklabels()
+      plt.setp(xlabel, rotation=45, horizontalalignment='right', fontsize = 20)
+      plt.setp(ylabel,fontsize = 20)
+      ax.set_title(('{}').format(annees[i]), fontsize=30, color='b')
+      ax.set_ylabel("")
+      ax.set_ylim(0,32000)
         
-        for p in ax.patches:
-            ax.annotate('{}'.format(p.get_height()), (p.get_x() + 0.2, p.get_height() + 1))    
+      for p in ax.patches:
+         ax.annotate('{}'.format(p.get_height()), (p.get_x() + 0.2, p.get_height() + 1))    
    
-        ax = axes[1,i]    
-        ax.pie(df[df['Year']==annees[i]]['Regroupement_payment_method'].value_counts(), 
-                    labels=df[df['Year']==annees[i]]['Regroupement_payment_method'].value_counts().index,
-                    autopct='%1.1f%%', shadow=True, startangle=90, colors = colors)
-    fig.suptitle('Etat des moyens de paiment', fontsize=40, color='b', y=0.98)
-    plt.tight_layout()
+      ax = axes[1,i]    
+      ax.pie(df[df['Year']==annees[i]]['Regroupement_payment_method'].value_counts(), 
+               labels=df[df['Year']==annees[i]]['Regroupement_payment_method'].value_counts().index,
+               autopct='%1.1f%%', shadow=True, startangle=90, colors = colors)
+   fig.suptitle('Etat des moyens de paiment', fontsize=40, color='b', y=0.98)
+   plt.tight_layout()
     
-    def make_space_above(axes, topmargin=1):
-        """ increase figure size to make topmargin (in inches) space for 
-            titles, without changing the axes sizes"""
-        fig = axes.flatten()[0].figure
-        s = fig.subplotpars
-        w, h = fig.get_size_inches()
-        figh = h - (1-s.top)*h  + topmargin
-        fig.subplots_adjust(bottom=s.bottom*h/figh, top=1-topmargin/figh)
-        fig.set_figheight(figh)
-    make_space_above(axes, topmargin=2)
+   def make_space_above(axes, topmargin=1):
+      """ increase figure size to make topmargin (in inches) space for 
+         titles, without changing the axes sizes"""
+      fig = axes.flatten()[0].figure
+      s = fig.subplotpars
+      w, h = fig.get_size_inches()
+      figh = h - (1-s.top)*h  + topmargin
+      fig.subplots_adjust(bottom=s.bottom*h/figh, top=1-topmargin/figh)
+      fig.set_figheight(figh)
+   make_space_above(axes, topmargin=2)
 
-    st.pyplot(fig);
-
-
+   st.pyplot(fig);
 
 
-# évolution du chiffre d'affaires
-    st.markdown(" <br><br><br><br>", unsafe_allow_html=True)
+
+   # évolution du chiffre d'affaires
+   st.markdown(" <br><br><br><br>", unsafe_allow_html=True)
         
-    st.markdown("<h4 style='text-align: center;'>Évolution du chiffre d'affaires</h4>", unsafe_allow_html=True)
+   st.markdown("<h4 style='text-align: center;'>Évolution du chiffre d'affaires</h4>", unsafe_allow_html=True)
 
-    mean_sales = df.groupby('Created_at', as_index=False).agg({'Net_income_euros':'mean'})
-    median_sales = df.groupby('Created_at', as_index=False).agg({'Net_income_euros':'median'})
+   mean_sales = df.groupby('Created_at', as_index=False).agg({'Net_income_euros':'mean'})
+   median_sales = df.groupby('Created_at', as_index=False).agg({'Net_income_euros':'median'})
           
 
-    fig, ax=plt.subplots(1,1,figsize = (20,5))
-    plt.plot_date(mean_sales["Created_at"], mean_sales['Net_income_euros'], 
-              xdate=True, 
-              ls='-', label='Moyenne', color =colors[0])
-    plt.plot_date(median_sales["Created_at"], median_sales['Net_income_euros'], 
-               xdate=True, 
-               ls='-', label='Médiane', color =colors[3])
-    plt.legend()
-    fig.suptitle('Evolution de la moyenne et de la médiane du chiffre d\'affaire des ventes', fontsize=30, color='b', y=0.98)
-    plt.tight_layout()
-    ax.xaxis.set_major_locator(mdates.MonthLocator(bymonth=(1, 7)))
-    ax.xaxis.set_minor_locator(mdates.MonthLocator())
-    st.pyplot(fig)
+   fig, ax=plt.subplots(1,1,figsize = (20,5))
+   plt.plot_date(mean_sales["Created_at"], mean_sales['Net_income_euros'], 
+         xdate=True, 
+         ls='-', label='Moyenne', color =colors[0])
+   plt.plot_date(median_sales["Created_at"], median_sales['Net_income_euros'], 
+         xdate=True, 
+         ls='-', label='Médiane', color =colors[3])
+   plt.legend()
+   fig.suptitle('Evolution de la moyenne et de la médiane du chiffre d\'affaire des ventes', fontsize=30, color='b', y=0.98)
+   plt.tight_layout()
+   ax.xaxis.set_major_locator(mdates.MonthLocator(bymonth=(1, 7)))
+   ax.xaxis.set_minor_locator(mdates.MonthLocator())
+   st.pyplot(fig)
 
-elif page== pages[1]:
-    df = pd.read_csv('exploration.csv')
-    df_rfm1 = pd.read_csv("df_rfm1.csv")
-    df_rfm2 = pd.read_csv("df_rfm2.csv")
-    pd.set_option('display.max_columns', None)
-    df['Created_at'] = pd.to_datetime(df['Created_at'])
-    df['Customer since'] = pd.to_datetime(df['Customer since']).dt.to_period('M')
-
-    df_rfm = pd.read_csv("df_rfm.csv")
+elif page == pages[1]:
+   df = pd.read_csv('exploration.csv')
+   df_rfm1 = pd.read_csv("df_rfm1.csv")
+   df_rfm2 = pd.read_csv("df_rfm2.csv")
+   pd.set_option('display.max_columns', None)
+   df['Created_at'] = pd.to_datetime(df['Created_at'])
+   df['Customer since'] = pd.to_datetime(df['Customer since']).dt.to_period('M')
+   df_rfm = pd.read_csv("df_rfm.csv")
 
     
    
-    st.markdown("<h2 style='font-weight:lighter; text-align: center; font-size: 60px;text-shadow: -1px -1px #000, 1px 1px #000, -3px 0 4px #000;'>Mise en oeuvre de la méthode RFM</h2>", unsafe_allow_html=True)
-    st.markdown(" <br><br>", unsafe_allow_html=True)
+st.markdown("<h2 style='font-weight:lighter; text-align: center; font-size: 60px;text-shadow: -1px -1px #000, 1px 1px #000, -3px 0 4px #000;'>Mise en oeuvre de la méthode RFM</h2>", unsafe_allow_html=True)
+st.markdown(" <br><br>", unsafe_allow_html=True)
     
 
     st.markdown("<h2 style='text-align: center; font-size:15'>Calcul des composantes RFM</h2>", unsafe_allow_html=True)
@@ -651,6 +646,7 @@ else:
         } </style> ''', unsafe_allow_html=True)
     
                    
+
 
 
 
