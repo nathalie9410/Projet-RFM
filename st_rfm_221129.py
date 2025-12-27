@@ -64,18 +64,17 @@ if page == pages[0]:
 
 
    # Chemin vers le zip dans ton repo
-    zip_path = "datasets.zip"
-    csv_name = "Pakistan Largest Ecommerce Dataset.csv"  # nom exact dans le zip
+zip_path = "datasets.zip"
+csv_name = "Pakistan Largest Ecommerce Dataset.csv"
 
-    with zipfile.ZipFile(zip_path) as z:
-        with z.open(csv_name) as f:
-            df1 = pd.read_csv(
-                f,
-                low_memory=False,
-                na_values=[' ', '\\N', 'NaN ']
-            )
-
-   pd.set_option('display.max_columns', None)
+with zipfile.ZipFile(zip_path) as z:
+   with z.open(csv_name) as f:
+      df1 = pd.read_csv(
+         f,
+         low_memory=False,
+         na_values=[' ', '\\N', 'NaN ']
+      )
+pd.set_option('display.max_columns', None)
 
    
     #df1= pd.read_csv("Pakistan Largest Ecommerce Dataset.csv")
@@ -656,5 +655,6 @@ else:
         } </style> ''', unsafe_allow_html=True)
     
                    
+
 
 
