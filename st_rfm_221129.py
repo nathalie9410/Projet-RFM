@@ -71,7 +71,6 @@ with zipfile.ZipFile(zip_path) as z:
          low_memory=False,
          na_values=[' ', '\\N', 'NaN ']
       )
-# pd.set_option('display.max_columns', None)
 
    
     #df1= pd.read_csv("Pakistan Largest Ecommerce Dataset.csv")
@@ -652,6 +651,7 @@ else:
         } </style> ''', unsafe_allow_html=True)
     
                    
+
 
 
 
