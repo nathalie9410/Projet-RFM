@@ -25,9 +25,6 @@ html, body, [class*="css"]  {
 </style>
 """, unsafe_allow_html=True)
 
-
-
-
 sns.set_theme()
 colors =['#0173b2', '#de8f05', '#029e73', '#d55e00', '#8172b3', '#ca9161', '#c44e52', '#949494', '#ece133', '#56b4e9']
 
@@ -43,7 +40,7 @@ page = st.sidebar.radio("aller vers", pages)
 
 # PAGE INTRODUCTION
 if page == pages[0]:
-#"background-image:url(images/background-h1-city.jpg)"
+# "background-image:url(images/background-h1-city.jpg)"
     # TITRE
     st.markdown("<h1 style='text-align: center; font-family:cursive ;color: #dc5534;font-size: 180px;text-shadow: -1px -1px #dc5534, 1px 1px #a00, -3px 0 4px #dc5534;'>RFM</h1>", unsafe_allow_html=True)
     st.markdown("<h1 style='text-align: center; font-family:cursive ;color: #dc5534;font-size: 20px;'>(Recency, Frequency,Monetary)</h1>", unsafe_allow_html=True)
@@ -59,8 +56,8 @@ if page == pages[0]:
   
     st.markdown("<p style = 'font-size : 22px'>DataFrame Originel <a href =https://www.kaggle.com/zusmani/pakistans-largest-ecommerce-dataset>RFM</a></p>",unsafe_allow_html=True)
    
-    #url = "https://drive.google.com/uc?export=download&id=1gWKM0KgTq_PxFYQpMtB78EHmwszOdses"
-    #df1 = pd.read_csv(url)
+    # url = "https://drive.google.com/uc?export=download&id=1gWKM0KgTq_PxFYQpMtB78EHmwszOdses"
+    # df1 = pd.read_csv(url)
 
 
    # Chemin vers le zip dans ton repo
@@ -74,7 +71,7 @@ with zipfile.ZipFile(zip_path) as z:
          low_memory=False,
          na_values=[' ', '\\N', 'NaN ']
       )
-pd.set_option('display.max_columns', None)
+# pd.set_option('display.max_columns', None)
 
    
     #df1= pd.read_csv("Pakistan Largest Ecommerce Dataset.csv")
@@ -655,6 +652,7 @@ else:
         } </style> ''', unsafe_allow_html=True)
     
                    
+
 
 
 
