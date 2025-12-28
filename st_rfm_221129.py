@@ -129,91 +129,192 @@ if page == pages[0]:
    st.markdown(" <br><br><br><br>", unsafe_allow_html=True)
     
     
-   # évolution de la variable status   
-   st.markdown("<h4 style='text-align: center;'>Évolution du statut des commandes</h4>", unsafe_allow_html=True) 
-   st.markdown(" <br>", unsafe_allow_html=True)    
+   ## évolution de la variable status   
+   #st.markdown("<h4 style='text-align: center;'>Évolution du statut des commandes</h4>", unsafe_allow_html=True) 
+   #st.markdown(" <br>", unsafe_allow_html=True)    
    
-   annees = df['Year'].unique()
-   colors =['#0173b2', '#de8f05', '#029e73', '#d55e00', '#8172b3', '#ca9161', '#c44e52', '#949494', '#ece133', '#56b4e9']
-   fig, axes = plt.subplots(2, 3, figsize=(20,14), squeeze=False)
+   #annees = df['Year'].unique()
+   #colors =['#0173b2', '#de8f05', '#029e73', '#d55e00', '#8172b3', '#ca9161', '#c44e52', '#949494', '#ece133', '#56b4e9']
+   #fig, axes = plt.subplots(2, 3, figsize=(20,14), squeeze=False)
     
-   for i in range(3):
-      ax = axes[0,i]
-      sns.countplot(df[df['Year']==annees[i]]['Regroupement_status'], palette=colors, ax=ax)
-      labels = ax.get_xticklabels()
-      plt.setp(labels, rotation=45, horizontalalignment='right')
-      ax.set_title(('{}').format(annees[i]), fontsize=20, color='b')
-      ax.set_ylim(0,32000)
-      ax.set_ylabel("Nbre de commandes")
-      for p in ax.patches:
-         ax.annotate('{}'.format(p.get_height()), (p.get_x() + 0.3, p.get_height() + 1))    
+   #for i in range(3):
+      #ax = axes[0,i]
+      #sns.countplot(df[df['Year']==annees[i]]['Regroupement_status'], palette=colors, ax=ax)
+      #labels = ax.get_xticklabels()
+      #plt.setp(labels, rotation=45, horizontalalignment='right')
+      #ax.set_title(('{}').format(annees[i]), fontsize=20, color='b')
+      #ax.set_ylim(0,32000)
+      #ax.set_ylabel("Nbre de commandes")
+      #for p in ax.patches:
+         #ax.annotate('{}'.format(p.get_height()), (p.get_x() + 0.3, p.get_height() + 1))    
    
-   ax = axes[1,i]    
-   ax.pie(df[df['Year']==annees[i]]['Regroupement_status'].value_counts(), labels=df[df['Year']==annees[i]]['Regroupement_status'].unique(),autopct='%1.1f%%', shadow=True, startangle=90, colors = colors)
-   fig.suptitle('Evolution du statut des commandes', fontsize=30, color='b', y=0.98)
+   #ax = axes[1,i]    
+   #ax.pie(df[df['Year']==annees[i]]['Regroupement_status'].value_counts(), labels=df[df['Year']==annees[i]]['Regroupement_status'].unique(),autopct='%1.1f%%', shadow=True, startangle=90, colors = colors)
+   #fig.suptitle('Evolution du statut des commandes', fontsize=30, color='b', y=0.98)
+   #plt.tight_layout()
+    
+   #def make_space_above(axes, topmargin=1):
+      #""" increase figure size to make topmargin (in inches) space for titles, without changing the axes sizes"""
+      #fig = axes.flatten()[0].figure
+      #s = fig.subplotpars
+      #w, h = fig.get_size_inches()
+      #figh = h - (1-s.top)*h  + topmargin
+      #fig.subplots_adjust(bottom=s.bottom*h/figh, top=1-topmargin/figh)
+      #fig.set_figheight(figh)
+   #make_space_above(axes, topmargin=2)
+   #st.pyplot(fig);
+    
+   #st.markdown("<p style = 'font-size : 17px;text-align: justify'>Evolution négative des commandes finalisées sur la période.<br>Taux moyen d'annulation: 35.63%</p>",unsafe_allow_html=True)
+   
+      # Etat des statuts
+   st.markdown(
+      "<h4 style='text-align: center;'>Evolution du statut des commandes</h4>",
+      unsafe_allow_html=True
+   )
+   annees = sorted(df["Year"].unique())
+   fig, axes = plt.subplots(2, 3, figsize=(20, 10))
+
+   for i, year in enumerate(annees):
+      subset = df[df["Year"] == year]
+      # --- Barplot des statuts ---
+      ax_bar = axes[0, i]
+      sns.countplot(
+         data=subset,
+         x="Regroupement_status",
+         ax=ax_bar,
+         palette=colors
+      )
+      ax_bar.set_title(str(year))
+      ax_bar.set_xlabel("")
+      ax_bar.set_ylabel("Nombre de commandes")
+
+      # on force une échelle en "vrais" nombres de commandes
+      max_count = subset["Regroupement_status"].value_counts().max()
+      ax_bar.set_ylim(0, max_count * 1.10)
+
+      # valeurs au-dessus des barres
+      for p in ax_bar.patches:
+         height = p.get_height()
+         ax_bar.annotate(
+         f"{int(height)}",
+         (p.get_x() + p.get_width() / 2, height),
+         ha="center",
+         va="bottom",
+         fontsize=8
+         )
+
+       # --- Camembert des statuts ---
+      ax_pie = axes[1, i]
+      counts = subset["Regroupement_status"].value_counts()
+      ax_pie.pie(
+         counts.values,
+         labels=counts.index,
+         autopct="%1.1f%%",
+         shadow=True,
+         startangle=90,
+         colors=colors
+      )
+      ax_pie.set_title(str(year))
+      ax_pie.axis("equal")  # cercle bien rond
+      
+   fig.suptitle("Evolution du statut des commandes", fontsize=30, color="b", y=0.98)
    plt.tight_layout()
-    
-   def make_space_above(axes, topmargin=1):
-      """ increase figure size to make topmargin (in inches) space for titles, without changing the axes sizes"""
-      fig = axes.flatten()[0].figure
-      s = fig.subplotpars
-      w, h = fig.get_size_inches()
-      figh = h - (1-s.top)*h  + topmargin
-      fig.subplots_adjust(bottom=s.bottom*h/figh, top=1-topmargin/figh)
-      fig.set_figheight(figh)
-   make_space_above(axes, topmargin=2)
    st.pyplot(fig);
-    
-   st.markdown("<p style = 'font-size : 17px;text-align: justify'>Evolution négative des commandes finalisées sur la période.<br>Taux moyen d'annulation: 35.63%</p>",unsafe_allow_html=True)
-    
-    
-   # évolution de la variable moyens de paiement    
-
-   st.markdown(" <br><br><br><br>", unsafe_allow_html=True)
-        
-   st.markdown("<h4 style='text-align: center;'>Évolution des moyens de paiement</h4>", unsafe_allow_html=True)
 
 
-   annees = df['Year'].unique()
-    
-   colors = ['#0173b2', '#de8f05', '#029e73', '#d55e00', '#8172b3']
-
-   labels = ['cod', 'paiement immédiat', 'Paiement en plusieurs fois', 'voucher','portefeuille en ligne']
-   colors1 ={'cod':'#0173b2','paiement immédiat':'#de8f05','Paiement en plusieurs fois':'#029e73','voucher':'#d55e00','portefeuille en ligne':'#8172b3'}
-   fig, axes = plt.subplots(2, 3, figsize=(30,20), squeeze=False)
-    
-   for i in range(3):
-      ax = axes[0,i]
-      sns.countplot(df[df['Year']==annees[i]]['Regroupement_payment_method'], palette=colors1, ax=ax)
-      xlabel = ax.get_xticklabels()
-      ylabel = ax.get_yticklabels()
-      plt.setp(xlabel, rotation=45, horizontalalignment='right', fontsize = 20)
-      plt.setp(ylabel,fontsize = 20)
-      ax.set_title(('{}').format(annees[i]), fontsize=30, color='b')
-      ax.set_ylabel("")
-      ax.set_ylim(0,32000)
-        
-      for p in ax.patches:
-         ax.annotate('{}'.format(p.get_height()), (p.get_x() + 0.2, p.get_height() + 1))    
    
-      ax = axes[1,i]    
-      ax.pie(df[df['Year']==annees[i]]['Regroupement_payment_method'].value_counts(), 
-               labels=df[df['Year']==annees[i]]['Regroupement_payment_method'].value_counts().index,
-               autopct='%1.1f%%', shadow=True, startangle=90, colors = colors)
-   fig.suptitle('Etat des moyens de paiment', fontsize=40, color='b', y=0.98)
-   plt.tight_layout()
-    
-   def make_space_above(axes, topmargin=1):
-      """ increase figure size to make topmargin (in inches) space for 
-         titles, without changing the axes sizes"""
-      fig = axes.flatten()[0].figure
-      s = fig.subplotpars
-      w, h = fig.get_size_inches()
-      figh = h - (1-s.top)*h  + topmargin
-      fig.subplots_adjust(bottom=s.bottom*h/figh, top=1-topmargin/figh)
-      fig.set_figheight(figh)
-   make_space_above(axes, topmargin=2)
+   ## évolution de la variable moyens de paiement    
 
+   #st.markdown(" <br><br><br><br>", unsafe_allow_html=True)
+        
+   #st.markdown("<h4 style='text-align: center;'>Évolution des moyens de paiement</h4>", unsafe_allow_html=True)
+
+
+   #annees = df['Year'].unique()
+    
+   #colors = ['#0173b2', '#de8f05', '#029e73', '#d55e00', '#8172b3']
+
+   #labels = ['cod', 'paiement immédiat', 'Paiement en plusieurs fois', 'voucher','portefeuille en ligne']
+   #colors1 ={'cod':'#0173b2','paiement immédiat':'#de8f05','Paiement en plusieurs fois':'#029e73','voucher':'#d55e00','portefeuille en ligne':'#8172b3'}
+   #fig, axes = plt.subplots(2, 3, figsize=(30,20), squeeze=False)
+    
+   #for i in range(3):
+      #ax = axes[0,i]
+      #sns.countplot(df[df['Year']==annees[i]]['Regroupement_payment_method'], palette=colors1, ax=ax)
+      #xlabel = ax.get_xticklabels()
+      #ylabel = ax.get_yticklabels()
+      #plt.setp(xlabel, rotation=45, horizontalalignment='right', fontsize = 20)
+      #plt.setp(ylabel,fontsize = 20)
+      #ax.set_title(('{}').format(annees[i]), fontsize=30, color='b')
+      #ax.set_ylabel("")
+      #ax.set_ylim(0,32000)
+        
+      #for p in ax.patches:
+         #ax.annotate('{}'.format(p.get_height()), (p.get_x() + 0.2, p.get_height() + 1))    
+   
+      #ax = axes[1,i]    
+      #ax.pie(df[df['Year']==annees[i]]['Regroupement_payment_method'].value_counts(), 
+               #labels=df[df['Year']==annees[i]]['Regroupement_payment_method'].value_counts().index,
+               #autopct='%1.1f%%', shadow=True, startangle=90, colors = colors)
+   #fig.suptitle('Etat des moyens de paiment', fontsize=40, color='b', y=0.98)
+   #plt.tight_layout()
+    
+   #def make_space_above(axes, topmargin=1):
+      #""" increase figure size to make topmargin (in inches) space for 
+         #titles, without changing the axes sizes"""
+      #fig = axes.flatten()[0].figure
+      #s = fig.subplotpars
+      #w, h = fig.get_size_inches()
+      #figh = h - (1-s.top)*h  + topmargin
+      #fig.subplots_adjust(bottom=s.bottom*h/figh, top=1-topmargin/figh)
+      #fig.set_figheight(figh)
+   #make_space_above(axes, topmargin=2)
+
+   #st.pyplot(fig);
+
+   # Evolution des moyens de paiement
+   st.markdown(
+      "<h4 style='text-align: center;'>Evolution des moyens de paiement</h4>",
+      unsafe_allow_html=True
+   )
+
+   fig, axes = plt.subplots(2, 3, figsize=(20, 12))
+
+   for i, year in enumerate(annees):
+      subset = df[df["Year"] == year]
+
+      # --- Barplot des moyens de paiement ---
+      ax_bar = axes[0, i]
+      sns.countplot(
+         data=subset,
+         x="Regroupement_payment_method",
+         ax=ax_bar,
+         palette=colors1
+      )
+      ax_bar.set_title(str(year))
+      ax_bar.set_xlabel("")
+      ax_bar.set_ylabel("Nombre de commandes")
+      ax_bar.tick_params(axis="x", rotation=45)
+
+      max_count = subset["Regroupement_payment_method"].value_counts().max()
+      ax_bar.set_ylim(0, max_count * 1.10)
+
+      # --- Camembert des moyens de paiement ---
+      ax_pie = axes[1, i]
+      counts_pm = subset["Regroupement_payment_method"].value_counts()
+      ax_pie.pie(
+         counts_pm.values,
+         labels=counts_pm.index,
+         autopct="%1.1f%%",
+         shadow=True,
+         startangle=90,
+         colors=colors1
+      )
+      ax_pie.set_title(str(year))
+      ax_pie.axis("equal")
+
+   fig.suptitle("Evolution des moyens de paiement", fontsize=30, color="b", y=0.98)
+   plt.tight_layout()
    st.pyplot(fig);
 
 
@@ -697,6 +798,7 @@ else:
    st.markdown(''' <style> [data-testid="stMarkdownContainer"] ul{padding-left:40px;} </style> ''', unsafe_allow_html=True)
     
                    
+
 
 
 
