@@ -225,7 +225,7 @@ if page == pages[0]:
 
    #######################
    #Rajout d'un ligne de conversion au format datetime
-   df['Created_at'] = pd.to_datetime(df['Created_at']
+   df['Created_at'] = pd.to_datetime(df['Created_at'])
    ############################
                                      
    mean_sales = df.groupby('Created_at', as_index=False).agg({'Net_income_euros':'mean'})
@@ -697,6 +697,7 @@ else:
    st.markdown(''' <style> [data-testid="stMarkdownContainer"] ul{padding-left:40px;} </style> ''', unsafe_allow_html=True)
     
                    
+
 
 
 
