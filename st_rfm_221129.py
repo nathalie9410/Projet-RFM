@@ -76,7 +76,7 @@ if page == pages[0]:
    with zipfile.ZipFile(zip_path) as z:
       # On récupère automatiquement le nom du fichier .csv dans le zip
       csv_files = [name for name in z.namelist() if name.lower().endswith(".csv")]
-      st.write("Fichiers trouvés dans le zip :", csv_files)  # debug, optionnel
+      #st.write("Fichiers trouvés dans le zip :", csv_files)  # debug, optionnel
       # On prend le premier .csv trouvé
       csv_name = csv_files[0]
       with z.open(csv_name) as f:
@@ -109,9 +109,22 @@ if page == pages[0]:
    st.markdown("<h2 style='font-weight:lighter; text-align: center; font-size: 60px;text-shadow: -1px -1px #000, 1px 1px #000, -3px 0 4px #000;'>Story Telling</h2>", unsafe_allow_html=True)
    st.title("")
    st.markdown("<h4 style='text-align: center;'>Analyse de la relation entre les différentes variables numériques</h4>", unsafe_allow_html=True)
+   #fig = plt.figure()
+   #sns.heatmap(df.corr(), annot=True, center=0, cmap= "magma", annot_kws={"fontsize":8}, fmt=".2f")
+   #st.pyplot(fig);
    fig = plt.figure()
-   sns.heatmap(df.corr(), annot=True, center=0, cmap= "magma", annot_kws={"fontsize":8}, fmt=".2f")
+   # On ne garde que les colonnes numériques pour la corrélation
+   numeric_df = df.select_dtypes(include="number")
+   sns.heatmap(
+      numeric_df.corr(),
+      annot=True,
+      center=0,
+      cmap="magma",
+      annot_kws={"fontsize": 8},
+      fmt=".2f"
+   )
    st.pyplot(fig);
+
    st.markdown("<p style = 'font-size : 17px;text-align: justify'>Relation de corrélation entre « Net_income_euros » et « Price_euros » uniquement.</p>",unsafe_allow_html=True)
    st.markdown(" <br><br><br><br>", unsafe_allow_html=True)
     
@@ -647,6 +660,7 @@ else:
    st.markdown(''' <style> [data-testid="stMarkdownContainer"] ul{padding-left:40px;} </style> ''', unsafe_allow_html=True)
     
                    
+
 
 
 
