@@ -223,23 +223,60 @@ if page == pages[0]:
         
    st.markdown("<h4 style='text-align: center;'>Évolution du chiffre d'affaires</h4>", unsafe_allow_html=True)
 
+   #######################
+   #Rajout d'un ligne de conversion au format datetime
+   df['Created_at'] = pd.to_datetime(df['Created_at']
+   ############################
+                                     
    mean_sales = df.groupby('Created_at', as_index=False).agg({'Net_income_euros':'mean'})
    median_sales = df.groupby('Created_at', as_index=False).agg({'Net_income_euros':'median'})
           
+   ############## Partie originale ################
+   #fig, ax=plt.subplots(1,1,figsize = (20,5))
+   #plt.plot_date(mean_sales["Created_at"], mean_sales['Net_income_euros'], 
+         #xdate=True, 
+         #ls='-', label='Moyenne', color =colors[0])
+  # plt.plot_date(median_sales["Created_at"], median_sales['Net_income_euros'], 
+         #xdate=True, 
+         #ls='-', label='Médiane', color =colors[3])
+   #plt.legend()
+   #fig.suptitle('Evolution de la moyenne et de la médiane du chiffre d\'affaire des ventes', fontsize=30, color='b', y=0.98)
+   #plt.tight_layout()
+   #ax.xaxis.set_major_locator(mdates.MonthLocator(bymonth=(1, 7)))
+   #ax.xaxis.set_minor_locator(mdates.MonthLocator())
+   #st.pyplot(fig)
+   ##################################################
 
-   fig, ax=plt.subplots(1,1,figsize = (20,5))
-   plt.plot_date(mean_sales["Created_at"], mean_sales['Net_income_euros'], 
-         xdate=True, 
-         ls='-', label='Moyenne', color =colors[0])
-   plt.plot_date(median_sales["Created_at"], median_sales['Net_income_euros'], 
-         xdate=True, 
-         ls='-', label='Médiane', color =colors[3])
-   plt.legend()
-   fig.suptitle('Evolution de la moyenne et de la médiane du chiffre d\'affaire des ventes', fontsize=30, color='b', y=0.98)
-   plt.tight_layout()
-   ax.xaxis.set_major_locator(mdates.MonthLocator(bymonth=(1, 7)))
-   ax.xaxis.set_minor_locator(mdates.MonthLocator())
-   st.pyplot(fig)
+   ############### Partie de remplacement ############
+   fig, ax = plt.subplots(figsize=(10, 4))
+   ax.plot(
+      mean_sales["Created_at"],
+      mean_sales["Net_income_euros"],
+      linestyle='-',
+      marker='o',
+      label='Moyenne',
+      color=colors[0]
+   )
+
+   ax.plot(
+      median_sales["Created_at"],
+      median_sales["Net_income_euros"],
+      linestyle='-',
+      marker='o',
+      label='Médiane',
+      color=colors[3]
+   )
+
+   ax.set_xlabel("Date")
+   ax.set_ylabel("Chiffre d'affaires (euros)")
+   ax.set_title("Évolution de la moyenne et de la médiane du chiffre d'affaires des ventes")
+   ax.legend()
+   ax.grid(True)
+   fig.autofmt_xdate()
+
+   st.pyplot(fig);
+
+   ###################################################
 
 elif page == pages[1]:
    df = pd.read_csv('exploration.csv')
@@ -660,6 +697,7 @@ else:
    st.markdown(''' <style> [data-testid="stMarkdownContainer"] ul{padding-left:40px;} </style> ''', unsafe_allow_html=True)
     
                    
+
 
 
 
