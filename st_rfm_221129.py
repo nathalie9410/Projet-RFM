@@ -76,7 +76,7 @@ if page == pages[0]:
    with zipfile.ZipFile(zip_path) as z:
       # On récupère automatiquement le nom du fichier .csv dans le zip
       csv_files = [name for name in z.namelist() if name.lower().endswith(".csv")]
-      #st.write("Fichiers trouvés dans le zip :", csv_files)  # debug, optionnel
+      st.write("Fichiers trouvés dans le zip :", csv_files)  # debug, optionnel
       # On prend le premier .csv trouvé
       csv_name = csv_files[0]
       with z.open(csv_name) as f:
@@ -660,6 +660,7 @@ else:
    st.markdown(''' <style> [data-testid="stMarkdownContainer"] ul{padding-left:40px;} </style> ''', unsafe_allow_html=True)
     
                    
+
 
 
 
