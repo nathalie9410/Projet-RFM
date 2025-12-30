@@ -286,12 +286,12 @@ if page == pages[0]:
       # --- Barplot des moyens de paiement ---
       ax_bar = axes[0, i]
        # on construit une LISTE de couleurs dans le bon ordre
-      pie_colors = [colors1[label] for label in counts_pm.index]
+      #pie_colors = [colors1[label] for label in counts_pm.index]
       sns.countplot(
          data=subset,
          x="Regroupement_payment_method",
          ax=ax_bar,
-         palette=pie_colors
+         palette=colors1
       )
       ax_bar.set_title(str(year))
       ax_bar.set_xlabel("")
@@ -804,6 +804,7 @@ else:
    st.markdown(''' <style> [data-testid="stMarkdownContainer"] ul{padding-left:40px;} </style> ''', unsafe_allow_html=True)
     
                    
+
 
 
 
