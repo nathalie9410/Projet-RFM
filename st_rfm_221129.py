@@ -285,11 +285,13 @@ if page == pages[0]:
 
       # --- Barplot des moyens de paiement ---
       ax_bar = axes[0, i]
+       # on construit une LISTE de couleurs dans le bon ordre
+      pie_colors = [colors1[label] for label in counts_pm.index]
       sns.countplot(
          data=subset,
          x="Regroupement_payment_method",
          ax=ax_bar,
-         palette=colors1
+         palette=pie_colors
       )
       ax_bar.set_title(str(year))
       ax_bar.set_xlabel("")
@@ -299,16 +301,21 @@ if page == pages[0]:
       max_count = subset["Regroupement_payment_method"].value_counts().max()
       ax_bar.set_ylim(0, max_count * 1.10)
 
+
       # --- Camembert des moyens de paiement ---
       ax_pie = axes[1, i]
       counts_pm = subset["Regroupement_payment_method"].value_counts()
+
+      # on construit une LISTE de couleurs dans le bon ordre
+      pie_colors = [colors1[label] for label in counts_pm.index]
+
       ax_pie.pie(
          counts_pm.values,
          labels=counts_pm.index,
          autopct="%1.1f%%",
          shadow=True,
          startangle=90,
-         colors=colors1
+         colors=pie_colors
       )
       ax_pie.set_title(str(year))
       ax_pie.axis("equal")
@@ -316,8 +323,7 @@ if page == pages[0]:
    fig.suptitle("Evolution des moyens de paiement", fontsize=30, color="b", y=0.98)
    plt.tight_layout()
    st.pyplot(fig);
-
-
+   
 
    # évolution du chiffre d'affaires
    st.markdown(" <br><br><br><br>", unsafe_allow_html=True)
@@ -798,6 +804,7 @@ else:
    st.markdown(''' <style> [data-testid="stMarkdownContainer"] ul{padding-left:40px;} </style> ''', unsafe_allow_html=True)
     
                    
+
 
 
 
