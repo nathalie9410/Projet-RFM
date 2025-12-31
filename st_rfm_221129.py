@@ -126,15 +126,6 @@ if page == pages[0]:
    st.pyplot(fig);
 
    st.markdown(" <br><br>", unsafe_allow_html=True)
-   st.markdown(
-      "<p style='font-size:17px; text-align: justify'>\
-      Evolution négative des commandes finalisées sur la période.<br>\
-      Taux moyen d'annulation: 35.63%\
-      </p>",
-      unsafe_allow_html=True
-)
-
-   st.markdown(" <br><br>", unsafe_allow_html=True)
    st.markdown("""
    ### Ce qu'on observe sur les corrélations
    - Les variables **prix**, **remise** et **revenu net** sont logiquement corrélées entre elles.
@@ -194,7 +185,7 @@ if page == pages[0]:
    # palette dédiée : finalisé / annulé / en attente
    colors_status = ["#0173b2", "#de8f05", "#029e73"]  # bleu / orange / vert
 
-   fig, axes = plt.subplots(2, 3, figsize=(20, 10), sqeeze=False)
+   fig, axes = plt.subplots(2, 3, figsize=(20, 10), squeeze=False)
 
    for i, year in enumerate(annees):
       subset = df[df["Year"] == year]
@@ -251,6 +242,16 @@ if page == pages[0]:
    #plt.tight_layout()
    fig.tight_layout(rect=[0, 0, 1, 0.98])
    st.pyplot(fig);
+
+   st.markdown(" <br><br>", unsafe_allow_html=True)
+   st.markdown(
+      "<p style='font-size:17px; text-align: justify'>\
+      Evolution négative des commandes finalisées sur la période.<br>\
+      Taux moyen d'annulation: 35.63%\
+      </p>",
+      unsafe_allow_html=True
+   )
+
 
    st.markdown(" <br><br>", unsafe_allow_html=True)
    st.markdown("""
@@ -902,6 +903,7 @@ else:
    st.markdown(''' <style> [data-testid="stMarkdownContainer"] ul{padding-left:40px;} </style> ''', unsafe_allow_html=True)
     
                    
+
 
 
 
