@@ -126,15 +126,24 @@ if page == pages[0]:
    st.pyplot(fig);
 
    st.markdown(" <br><br>", unsafe_allow_html=True)
+   st.markdown(
+      "<p style='font-size:17px; text-align: justify'>\
+      Evolution négative des commandes finalisées sur la période.<br>\
+      Taux moyen d'annulation: 35.63%\
+      </p>",
+      unsafe_allow_html=True
+)
+
+   st.markdown(" <br><br>", unsafe_allow_html=True)
    st.markdown("""
    ### Ce qu'on observe sur les corrélations
    - Les variables **prix**, **remise** et **revenu net** sont logiquement corrélées entre elles.
    - Les variables **Année** et **Mois** structurent le comportement d'achat mais restent peu corrélées aux montants.
    - Pas de corrélation extrême qui laisserait penser à une variable redondante ou mal construite.
    """)
-   st.markdown(" <br><br>", unsafe_allow_html=True)
+   #st.markdown(" <br><br>", unsafe_allow_html=True)
 
-   st.markdown("<p style = 'font-size : 17px;text-align: justify'>Relation de corrélation entre « Net_income_euros » et « Price_euros » uniquement.</p>",unsafe_allow_html=True)
+   #st.markdown("<p style = 'font-size : 17px;text-align: justify'>Relation de corrélation entre « Net_income_euros » et « Price_euros » uniquement.</p>",unsafe_allow_html=True)
    st.markdown(" <br><br><br><br>", unsafe_allow_html=True)
     
     
@@ -893,6 +902,7 @@ else:
    st.markdown(''' <style> [data-testid="stMarkdownContainer"] ul{padding-left:40px;} </style> ''', unsafe_allow_html=True)
     
                    
+
 
 
 
