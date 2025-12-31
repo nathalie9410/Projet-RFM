@@ -125,6 +125,15 @@ if page == pages[0]:
    )
    st.pyplot(fig);
 
+   st.markdown(" <br><br>", unsafe_allow_html=True)
+   st.markdown("""
+   ### Ce qu'on observe sur les corrélations
+   - Les variables **prix**, **remise** et **revenu net** sont logiquement corrélées entre elles.
+   - Les variables **Année** et **Mois** structurent le comportement d'achat mais restent peu corrélées aux montants.
+   - Pas de corrélation extrême qui laisserait penser à une variable redondante ou mal construite.
+   """)
+   st.markdown(" <br><br>", unsafe_allow_html=True)
+
    st.markdown("<p style = 'font-size : 17px;text-align: justify'>Relation de corrélation entre « Net_income_euros » et « Price_euros » uniquement.</p>",unsafe_allow_html=True)
    st.markdown(" <br><br><br><br>", unsafe_allow_html=True)
     
@@ -168,11 +177,15 @@ if page == pages[0]:
    
       # Etat des statuts
    st.markdown(
-      "<h4 style='text-align: center;'>Evolution du statut des commandes</h4>",
+      "<h4 style='text-align: center;'>Évolution du statut des commandes</h4>",
       unsafe_allow_html=True
    )
-   annees = sorted(df["Year"].unique())
-   fig, axes = plt.subplots(2, 3, figsize=(20, 10))
+   annees = df["Year"].unique()
+
+   # palette dédiée : finalisé / annulé / en attente
+   colors_status = ["#0173b2", "#de8f05", "#029e73"]  # bleu / orange / vert
+
+   fig, axes = plt.subplots(2, 3, figsize=(20, 10), sqeeze=False)
 
    for i, year in enumerate(annees):
       subset = df[df["Year"] == year]
@@ -182,11 +195,13 @@ if page == pages[0]:
          data=subset,
          x="Regroupement_status",
          ax=ax_bar,
-         palette=colors
+         order=["finalisé", "annulé", "en attente"],  # adapte si les libellés diffèrent
+         palette=colors_status
       )
       ax_bar.set_title(str(year))
       ax_bar.set_xlabel("")
-      ax_bar.set_ylabel("Nombre de commandes")
+      ax_bar.set_ylabel("Nombre de commandes" if i == 0 else "")
+      ax_bar.tick_params(axis="x", rotation=45)
 
       # on force une échelle en "vrais" nombres de commandes
       max_count = subset["Regroupement_status"].value_counts().max()
@@ -205,27 +220,47 @@ if page == pages[0]:
 
        # --- Camembert des statuts ---
       ax_pie = axes[1, i]
-      counts = subset["Regroupement_status"].value_counts()
+      counts = subset["Regroupement_status"].value_counts().reindex(
+         ["finalisé", "annulé", "en attente"]
+      )
       ax_pie.pie(
          counts.values,
          labels=counts.index,
          autopct="%1.1f%%",
          shadow=True,
          startangle=90,
-         colors=colors
+         colors=colors_status
       )
       ax_pie.set_title(str(year))
       ax_pie.axis("equal")  # cercle bien rond
       
-   fig.suptitle("Evolution du statut des commandes", fontsize=30, color="b", y=0.98)
-   plt.tight_layout()
+   fig.suptitle(
+      "Evolution du statut des commandes",
+      fontsize=30,
+      color="b",
+      y=0.96)
+   #plt.tight_layout()
+   fig.tight_layout(rect=[0, 0, 1, 0.98])
    st.pyplot(fig);
+
+   st.markdown(" <br><br>", unsafe_allow_html=True)
+   st.markdown("""
+   ### Insights sur le statut des commandes
+   - La majorité des commandes sont **finalisées** chaque année.
+   - Le **taux d'annulation** augmente progressivement entre 2016 et 2018, ce qui peut traduire soit un durcissement des conditions (fraude, rupture de stock), soit une expérience client à surveiller.
+   - Les commandes **en attente** restent marginales, ce qui est plutôt rassurant côté process logistique.
+
+   En pratique, il serait intéressant de :
+   - Croiser le statut des commandes avec les **canaux d'acquisition** ou les **moyens de paiement**,
+   - Suivre un **taux d'annulation mensuel** pour détecter rapidement les dérives.
+   """)
+   #st.markdown(" <br><br>", unsafe_allow_html=True)
 
 
    
    ## évolution de la variable moyens de paiement    
 
-   #st.markdown(" <br><br><br><br>", unsafe_allow_html=True)
+   st.markdown(" <br><br><br><br>", unsafe_allow_html=True)
         
    #st.markdown("<h4 style='text-align: center;'>Évolution des moyens de paiement</h4>", unsafe_allow_html=True)
 
@@ -278,7 +313,11 @@ if page == pages[0]:
       unsafe_allow_html=True
    )
 
-   fig, axes = plt.subplots(2, 3, figsize=(20, 12))
+   annees = df["Year"].unique()
+
+   colors_pm = ["#0173b2", "#de8f05", "#029e73", "#d55e00", "#8172b3"]
+
+   fig, axes = plt.subplots(2, 3, figsize=(20, 12), squeeze=False)
 
    for i, year in enumerate(annees):
       subset = df[df["Year"] == year]
@@ -291,15 +330,16 @@ if page == pages[0]:
          data=subset,
          x="Regroupement_payment_method",
          ax=ax_bar,
-         palette=colors1
+         palette=colors_pm
       )
       ax_bar.set_title(str(year))
       ax_bar.set_xlabel("")
-      ax_bar.set_ylabel("Nombre de commandes")
+      ax_bar.set_ylabel("Nombre de commandes" if i == 0 else "")
       ax_bar.tick_params(axis="x", rotation=45)
+      ax_bar.margins(y=0.1)
 
-      max_count = subset["Regroupement_payment_method"].value_counts().max()
-      ax_bar.set_ylim(0, max_count * 1.10)
+      #max_count = subset["Regroupement_payment_method"].value_counts().max()
+      #ax_bar.set_ylim(0, max_count * 1.10)
 
 
       # --- Camembert des moyens de paiement ---
@@ -309,20 +349,57 @@ if page == pages[0]:
       # on construit une LISTE de couleurs dans le bon ordre
       pie_colors = [colors1[label] for label in counts_pm.index]
 
-      ax_pie.pie(
-         counts_pm.values,
-         labels=counts_pm.index,
+      wedges, texts, autotexts = ax_pie(
+         count_pm.values,
          autopct="%1.1f%%",
-         shadow=True,
          startangle=90,
-         colors=pie_colors
+         shadow=True,
+         colors=colors_pm[: len(counts_pm)],
+         textprops={"fontsize": 9}
       )
+         
+      #ax_pie.pie(
+         #counts_pm.values,
+         #labels=counts_pm.index,
+         #autopct="%1.1f%%",
+         #shadow=True,
+         #startangle=90,
+         #colors=pie_colors
+      #)
+      
       ax_pie.set_title(str(year))
       ax_pie.axis("equal")
 
-   fig.suptitle("Evolution des moyens de paiement", fontsize=30, color="b", y=0.98)
-   plt.tight_layout()
+      ax_pie.legend(
+         wedges,
+         counts_pm.index,
+         title="Moyen de paiement",
+         loc="center left",
+         bbox_to_anchor=(1.05, 0.5),
+         fontsize=9
+      )
+
+
+   fig.suptitle(
+      "Evolution des moyens de paiement",
+      fontsize=30,
+      color="b",
+      y=0.96
+   )
+   fig.tight_layout(rect=[0, 0, 1, 0.90])
    st.pyplot(fig);
+
+   st.markdown(" <br><br>", unsafe_allow_html=True)
+   st.markdown("""
+   ### Insights sur les moyens de paiement
+   - Le **paiement à la livraison (COD)** domine encore, mais sa part diminue au fil des années.
+   - Les paiements **en ligne** (portefeuille, carte, paiement en plusieurs fois, voucher) progressent progressivement, signe d'une **maturité digitale** croissante des clients.
+   - Les méthodes minoritaires restent stables mais peuvent correspondre à des niches à forte valeur.
+
+   Idées d'actions :
+   - Encourager les paiements en ligne via des **remises dédiées** ou la mise en avant de la sécurité.
+   - Analyser la **performance par moyen de paiement** (taux d'annulation, panier moyen, fréquence d'achat).
+   """)
    
 
    # évolution du chiffre d'affaires
@@ -382,6 +459,18 @@ if page == pages[0]:
    fig.autofmt_xdate()
 
    st.pyplot(fig);
+
+   st.markdown(" <br><br>", unsafe_allow_html=True)
+   st.markdown("""
+   ### Lecture de l'évolution du chiffre d'affaires
+   - Le chiffre d'affaires est fortement **saisonnier** avec des pics marqués à certaines périodes (lancements produits, soldes, périodes festives…).
+   - La **moyenne** et la **médiane** du CA quotidien sont assez éloignées, ce qui indique la présence de **jours “exceptionnels”** qui tirent la moyenne vers le haut.
+   - Pour piloter le business, la médiane est souvent plus représentative du **“niveau normal”** d'activité, tandis que la moyenne permet de mesurer l'impact des gros événements.
+
+   Pistes d'analyse complémentaires :
+   - Isoler les périodes de **forte activité** et regarder quels produits / catégories les tirent.
+   - Suivre le CA par **segment RFM** (clients récents / fidèles / à risque) pour identifier les leviers de croissance.
+   """)
 
    ###################################################
 
@@ -804,6 +893,7 @@ else:
    st.markdown(''' <style> [data-testid="stMarkdownContainer"] ul{padding-left:40px;} </style> ''', unsafe_allow_html=True)
     
                    
+
 
 
 
