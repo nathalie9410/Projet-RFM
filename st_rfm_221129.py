@@ -145,47 +145,22 @@ if page == pages[0]:
    #annees = df['Year'].unique()
    colors =['#0173b2', '#de8f05', '#029e73', '#d55e00', '#8172b3', '#ca9161', '#c44e52', '#949494', '#ece133', '#56b4e9']
    fig, axes = plt.subplots(2, 3, figsize=(20,14), squeeze=False)
-    
-   #for i in range(3):
-      #ax = axes[0,i]
-      #sns.countplot(df[df['Year']==annees[i]]['Regroupement_status'], palette=colors, ax=ax)
-      #labels = ax.get_xticklabels()
-      #plt.setp(labels, rotation=45, horizontalalignment='right')
-      #ax.set_title(('{}').format(annees[i]), fontsize=20, color='b')
-      #ax.set_ylim(0,32000)
-      #ax.set_ylabel("Nbre de commandes")
-      #for p in ax.patches:
-         #ax.annotate('{}'.format(p.get_height()), (p.get_x() + 0.3, p.get_height() + 1))    
+
+   # -----------------------------------------------------------
+   # Évolution du statut des commandes
+   # -----------------------------------------------------------
    
-   #ax = axes[1,i]    
-   #ax.pie(df[df['Year']==annees[i]]['Regroupement_status'].value_counts(), labels=df[df['Year']==annees[i]]['Regroupement_status'].unique(),autopct='%1.1f%%', shadow=True, startangle=90, colors = colors)
-   #fig.suptitle('Evolution du statut des commandes', fontsize=30, color='b', y=0.98)
-   #plt.tight_layout()
-    
-   #def make_space_above(axes, topmargin=1):
-      #""" increase figure size to make topmargin (in inches) space for titles, without changing the axes sizes"""
-      #fig = axes.flatten()[0].figure
-      #s = fig.subplotpars
-      #w, h = fig.get_size_inches()
-      #figh = h - (1-s.top)*h  + topmargin
-      #fig.subplots_adjust(bottom=s.bottom*h/figh, top=1-topmargin/figh)
-      #fig.set_figheight(figh)
-   #make_space_above(axes, topmargin=2)
-   #st.pyplot(fig);
-    
-   #st.markdown("<p style = 'font-size : 17px;text-align: justify'>Evolution négative des commandes finalisées sur la période.<br>Taux moyen d'annulation: 35.63%</p>",unsafe_allow_html=True)
-   
-      # Etat des statuts
    st.markdown(
       "<h4 style='text-align: center;'>Évolution du statut des commandes</h4>",
       unsafe_allow_html=True
    )
+   
    annees = df["Year"].unique()
 
    # palette dédiée : finalisé / annulé / en attente
    colors_status = ["#0173b2", "#de8f05", "#029e73"]  # bleu / orange / vert
 
-   fig, axes = plt.subplots(2, 3, figsize=(20, 10), squeeze=False)
+   fig, axes = plt.subplots(2, 3, figsize=(20, 10))
 
    for i, year in enumerate(annees):
       subset = df[df["Year"] == year]
@@ -200,7 +175,7 @@ if page == pages[0]:
       )
       ax_bar.set_title(str(year))
       ax_bar.set_xlabel("")
-      ax_bar.set_ylabel("Nombre de commandes" if i == 0 else "")
+      ax_bar.set_ylabel("Nombre de commandes")
       ax_bar.tick_params(axis="x", rotation=45)
 
       # on force une échelle en "vrais" nombres de commandes
@@ -220,10 +195,23 @@ if page == pages[0]:
 
        # --- Camembert des statuts ---
       ax_pie = axes[1, i]
-      counts = subset["Regroupement_status"].value_counts().reindex(
-         ["finalisé", "annulé", "en attente"]
-      )
-      ax_pie.pie(
+      counts = subset["Regroupement_status"].value_counts()
+      
+      counts = counts[counts > 0]
+      if len(counts) == 0:
+         ax_pie.text(
+            0.5,
+            0.5,
+            "Aucune donnée",
+            ha="center",
+            va="center",
+            fontsize=12
+         )
+         ax_pie.axis("off")
+        continue
+
+      colors_used = colors_status[: len(counts)]
+      wedges, texts, autotexts = ax_pie.pie(
          counts.values,
          labels=counts.index,
          autopct="%1.1f%%",
@@ -239,8 +227,11 @@ if page == pages[0]:
       fontsize=30,
       color="b",
       y=0.96)
-   #plt.tight_layout()
-   fig.tight_layout(rect=[0, 0, 1, 0.98])
+   
+   plt.subplots_adjust(
+      top=0.88,   # espace entre suptitle et les graphiques
+      hspace=0.45 # espace vertical entre barplots et camemberts
+   )
    st.pyplot(fig);
 
    st.markdown(" <br><br>", unsafe_allow_html=True)
@@ -903,6 +894,7 @@ else:
    st.markdown(''' <style> [data-testid="stMarkdownContainer"] ul{padding-left:40px;} </style> ''', unsafe_allow_html=True)
     
                    
+
 
 
 
