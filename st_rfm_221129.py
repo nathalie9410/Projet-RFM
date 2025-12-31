@@ -208,7 +208,7 @@ if page == pages[0]:
             fontsize=12
          )
          ax_pie.axis("off")
-        continue
+         continue
 
       colors_used = colors_status[: len(counts)]
       wedges, texts, autotexts = ax_pie.pie(
@@ -894,6 +894,7 @@ else:
    st.markdown(''' <style> [data-testid="stMarkdownContainer"] ul{padding-left:40px;} </style> ''', unsafe_allow_html=True)
     
                    
+
 
 
 
