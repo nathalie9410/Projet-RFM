@@ -351,7 +351,7 @@ if page == pages[0]:
       pie_colors = [colors1[label] for label in counts_pm.index]
 
       wedges, texts, autotexts = ax_pie(
-         count_pm.values,
+         counts_pm.values,
          autopct="%1.1f%%",
          startangle=90,
          shadow=True,
@@ -894,6 +894,7 @@ else:
    st.markdown(''' <style> [data-testid="stMarkdownContainer"] ul{padding-left:40px;} </style> ''', unsafe_allow_html=True)
     
                    
+
 
 
 
