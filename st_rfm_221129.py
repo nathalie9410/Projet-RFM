@@ -264,7 +264,7 @@ if page == pages[0]:
     
    #colors = ['#0173b2', '#de8f05', '#029e73', '#d55e00', '#8172b3']
 
-   @labels = ['cod', 'paiement immédiat', 'Paiement en plusieurs fois', 'voucher','portefeuille en ligne']
+   #labels = ['cod', 'paiement immédiat', 'Paiement en plusieurs fois', 'voucher','portefeuille en ligne']
    #colors1 ={'cod':'#0173b2','paiement immédiat':'#de8f05','Paiement en plusieurs fois':'#029e73','voucher':'#d55e00','portefeuille en ligne':'#8172b3'}
    #fig, axes = plt.subplots(2, 3, figsize=(30,20), squeeze=False)
     
@@ -903,6 +903,7 @@ else:
    st.markdown(''' <style> [data-testid="stMarkdownContainer"] ul{padding-left:40px;} </style> ''', unsafe_allow_html=True)
     
                    
+
 
 
 
