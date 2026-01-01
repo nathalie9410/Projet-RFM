@@ -158,7 +158,12 @@ if page == pages[0]:
    annees = df["Year"].unique()
 
    # palette dédiée : finalisé / annulé / en attente
-   colors_status = ["#0173b2", "#de8f05", "#029e73"]  # bleu / orange / vert
+   #colors_status = ["#0173b2", "#de8f05", "#029e73"]  # bleu / orange / vert
+   status_palette = {
+      "finalisé": "#0173b2",   # bleu
+      "annulé": "#de8f05",     # orange
+      "en attente": "#029e73"  # vert
+   }
 
    fig, axes = plt.subplots(2, 3, figsize=(20, 10))
 
@@ -171,7 +176,7 @@ if page == pages[0]:
          x="Regroupement_status",
          ax=ax_bar,
          order=["finalisé", "annulé", "en attente"],  # adapte si les libellés diffèrent
-         palette=colors_status
+         palette=status_palette
       )
       ax_bar.set_title(str(year))
       ax_bar.set_xlabel("")
@@ -179,46 +184,35 @@ if page == pages[0]:
       ax_bar.tick_params(axis="x", rotation=45)
 
       # on force une échelle en "vrais" nombres de commandes
-      max_count = subset["Regroupement_status"].value_counts().max()
-      ax_bar.set_ylim(0, max_count * 1.10)
+      #max_count = subset["Regroupement_status"].value_counts().max()
+      #ax_bar.set_ylim(0, max_count * 1.10)
 
       # valeurs au-dessus des barres
       for p in ax_bar.patches:
          height = p.get_height()
          ax_bar.annotate(
-         f"{int(height)}",
-         (p.get_x() + p.get_width() / 2, height),
-         ha="center",
-         va="bottom",
-         fontsize=8
-         )
-
-       # --- Camembert des statuts ---
-      ax_pie = axes[1, i]
-      counts = subset["Regroupement_status"].value_counts()
-      
-      counts = counts[counts > 0]
-      if len(counts) == 0:
-         ax_pie.text(
-            0.5,
-            0.5,
-            "Aucune donnée",
+            f"{int(height)}",
+            (p.get_x() + p.get_width() / 2, height),
             ha="center",
-            va="center",
-            fontsize=12
+            va="bottom",
+            fontsize=8
          )
-         ax_pie.axis("off")
-         continue
 
-      colors_used = colors_status[: len(counts)]
-      wedges, texts, autotexts = ax_pie.pie(
+      # --- Camembert des statuts ---
+      ax_pie = axes[1, i]
+      counts = (
+         subset["Regroupement_status"].value_counts().reindex(["finalisé", "annulé", "en attente"]).dropna()
+      )
+
+      ax_pie.pie(
          counts.values,
          labels=counts.index,
          autopct="%1.1f%%",
-         shadow=True,
          startangle=90,
-         colors=colors_status
+         shadow=True,
+         colors=[status_palette[s] for s in counts.index]
       )
+         
       ax_pie.set_title(str(year))
       ax_pie.axis("equal")  # cercle bien rond
       
@@ -268,10 +262,10 @@ if page == pages[0]:
 
    #annees = df['Year'].unique()
     
-   colors = ['#0173b2', '#de8f05', '#029e73', '#d55e00', '#8172b3']
+   #colors = ['#0173b2', '#de8f05', '#029e73', '#d55e00', '#8172b3']
 
-   labels = ['cod', 'paiement immédiat', 'Paiement en plusieurs fois', 'voucher','portefeuille en ligne']
-   colors1 ={'cod':'#0173b2','paiement immédiat':'#de8f05','Paiement en plusieurs fois':'#029e73','voucher':'#d55e00','portefeuille en ligne':'#8172b3'}
+   @labels = ['cod', 'paiement immédiat', 'Paiement en plusieurs fois', 'voucher','portefeuille en ligne']
+   #colors1 ={'cod':'#0173b2','paiement immédiat':'#de8f05','Paiement en plusieurs fois':'#029e73','voucher':'#d55e00','portefeuille en ligne':'#8172b3'}
    #fig, axes = plt.subplots(2, 3, figsize=(30,20), squeeze=False)
     
    #for i in range(3):
@@ -308,7 +302,12 @@ if page == pages[0]:
 
    #st.pyplot(fig);
 
-   # Evolution des moyens de paiement
+
+
+   # -----------------------------------------------------------
+   # Évolution des moyens de paiement
+   # -----------------------------------------------------------
+ 
    st.markdown(
       "<h4 style='text-align: center;'>Evolution des moyens de paiement</h4>",
       unsafe_allow_html=True
@@ -316,7 +315,9 @@ if page == pages[0]:
 
    annees = df["Year"].unique()
 
+   labels = ['cod', 'paiement immédiat', 'Paiement en plusieurs fois', 'voucher','portefeuille en ligne']
    colors_pm = ["#0173b2", "#de8f05", "#029e73", "#d55e00", "#8172b3"]
+   palette_pm = dict(zip(labels_pm, colors_pm))
 
    fig, axes = plt.subplots(2, 3, figsize=(20, 12), squeeze=False)
 
@@ -330,33 +331,39 @@ if page == pages[0]:
       sns.countplot(
          data=subset,
          x="Regroupement_payment_method",
+         order=labels_pm,
          ax=ax_bar,
-         palette=colors_pm
+         palette=palette_pm
       )
       ax_bar.set_title(str(year))
       ax_bar.set_xlabel("")
-      ax_bar.set_ylabel("Nombre de commandes" if i == 0 else "")
+      ax_bar.set_ylabel("Nombre de commandes")
       ax_bar.tick_params(axis="x", rotation=45)
-      ax_bar.margins(y=0.1)
+      #ax_bar.margins(y=0.1)
 
       #max_count = subset["Regroupement_payment_method"].value_counts().max()
       #ax_bar.set_ylim(0, max_count * 1.10)
 
+      # On s'assure qu'il n'y ait PAS de légende sur le barplot
+      if ax_bar.get_legend() is not None:
+         ax_bar.get_legend().remove()
 
       # --- Camembert des moyens de paiement ---
       ax_pie = axes[1, i]
-      counts_pm = subset["Regroupement_payment_method"].value_counts()
+      counts_pm = (
+         subset["Regroupement_payment_method"].value_counts().value_counts().reindex(labels_pm).dropna()
+      )
 
       # on construit une LISTE de couleurs dans le bon ordre
-      pie_colors = [colors1[label] for label in counts_pm.index]
+      #pie_colors = [colors1[label] for label in counts_pm.index]
 
-      wedges, texts, autotexts = ax_pie.pie(
+      wedges, _ = ax_pie.pie(
          counts_pm.values,
+         labels=None,
          autopct="%1.1f%%",
          startangle=90,
          shadow=True,
-         colors=colors_pm[: len(counts_pm)],
-         textprops={"fontsize": 9}
+         colors=[palette_pm[m] for m in counts_pm.index],
       )
          
       #ax_pie.pie(
@@ -377,6 +384,7 @@ if page == pages[0]:
          title="Moyen de paiement",
          loc="center left",
          bbox_to_anchor=(1.05, 0.5),
+         frameon=False,
          fontsize=9
       )
 
@@ -387,7 +395,8 @@ if page == pages[0]:
       color="b",
       y=0.96
    )
-   fig.tight_layout(rect=[0, 0, 1, 0.90])
+   plt.subplots_adjust(top=0.86, hspace=0.55)
+   #fig.tight_layout(rect=[0, 0, 1, 0.90])
    st.pyplot(fig);
 
    st.markdown(" <br><br>", unsafe_allow_html=True)
@@ -894,6 +903,7 @@ else:
    st.markdown(''' <style> [data-testid="stMarkdownContainer"] ul{padding-left:40px;} </style> ''', unsafe_allow_html=True)
     
                    
+
 
 
 
