@@ -315,7 +315,7 @@ if page == pages[0]:
 
    annees = df["Year"].unique()
 
-   labels = ['cod', 'paiement immédiat', 'Paiement en plusieurs fois', 'voucher','portefeuille en ligne']
+   labels_pm = ['cod', 'paiement immédiat', 'Paiement en plusieurs fois', 'voucher','portefeuille en ligne']
    colors_pm = ["#0173b2", "#de8f05", "#029e73", "#d55e00", "#8172b3"]
    palette_pm = dict(zip(labels_pm, colors_pm))
 
@@ -903,6 +903,7 @@ else:
    st.markdown(''' <style> [data-testid="stMarkdownContainer"] ul{padding-left:40px;} </style> ''', unsafe_allow_html=True)
     
                    
+
 
 
 
