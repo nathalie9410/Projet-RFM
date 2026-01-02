@@ -178,8 +178,15 @@ if page == pages[0]:
          hue="Regroupement_status",
          ax=ax_bar,
          order=order_status,
+         dodge=False,
          palette=status_palette
       )
+      
+      # on supprime la légende (doublon inutile)
+      leg = ax_bar.get_legend()
+      if leg is not None:
+         leg.remove()
+      
       ax_bar.set_title(str(year))
       ax_bar.set_xlabel("")
       ax_bar.set_ylabel("Nombre de commandes")
@@ -333,10 +340,17 @@ if page == pages[0]:
       sns.countplot(
          data=subset,
          x="Regroupement_payment_method",
+         hue="Regroupement_payment_method",
          order=labels_pm,
+         dodge=False,
          ax=ax_bar,
          palette=palette_pm
       )
+
+      leg = ax_bar.get_legend()
+      if leg is not None:
+         leg.remove()
+      
       ax_bar.set_title(str(year))
       ax_bar.set_xlabel("")
       ax_bar.set_ylabel("Nombre de commandes")
@@ -352,9 +366,7 @@ if page == pages[0]:
 
       # --- Camembert des moyens de paiement ---
       ax_pie = axes[1, i]
-      counts_pm = (
-         subset["Regroupement_payment_method"].value_counts().value_counts().reindex(labels_pm).dropna()
-      )
+      counts_pm = subset["Regroupement_payment_method"].value_counts().reindex(labels_pm).dropna()
 
       # on construit une LISTE de couleurs dans le bon ordre
       #pie_colors = [colors1[label] for label in counts_pm.index]
@@ -387,7 +399,8 @@ if page == pages[0]:
          loc="center left",
          bbox_to_anchor=(1.05, 0.5),
          frameon=False,
-         fontsize=9
+         fontsize=9,
+         title_fontsize=10
       )
 
 
@@ -397,7 +410,7 @@ if page == pages[0]:
       color="b",
       y=0.96
    )
-   plt.subplots_adjust(top=0.86, hspace=0.55)
+   plt.subplots_adjust(top=0.86, hspace=0.35, wspace=0.30)
    #fig.tight_layout(rect=[0, 0, 1, 0.90])
    st.pyplot(fig);
 
@@ -905,6 +918,7 @@ else:
    st.markdown(''' <style> [data-testid="stMarkdownContainer"] ul{padding-left:40px;} </style> ''', unsafe_allow_html=True)
     
                    
+
 
 
 
