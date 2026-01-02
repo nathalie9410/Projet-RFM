@@ -177,7 +177,7 @@ if page == pages[0]:
          x="Regroupement_status",
          hue="Regroupement_status",
          ax=ax_bar,
-         order=order_status
+         order=order_status,
          palette=status_palette
       )
       ax_bar.set_title(str(year))
@@ -905,6 +905,7 @@ else:
    st.markdown(''' <style> [data-testid="stMarkdownContainer"] ul{padding-left:40px;} </style> ''', unsafe_allow_html=True)
     
                    
+
 
 
 
