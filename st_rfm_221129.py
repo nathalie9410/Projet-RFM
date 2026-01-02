@@ -164,6 +164,7 @@ if page == pages[0]:
       "annulé": "#de8f05",     # orange
       "en attente": "#029e73"  # vert
    }
+   order_status = ["finalisé", "annulé", "en attente"]
 
    fig, axes = plt.subplots(2, 3, figsize=(20, 10))
 
@@ -174,8 +175,9 @@ if page == pages[0]:
       sns.countplot(
          data=subset,
          x="Regroupement_status",
+         hue="Regroupement_status",
          ax=ax_bar,
-         order=["finalisé", "annulé", "en attente"],  # adapte si les libellés diffèrent
+         order=order_status
          palette=status_palette
       )
       ax_bar.set_title(str(year))
@@ -903,6 +905,7 @@ else:
    st.markdown(''' <style> [data-testid="stMarkdownContainer"] ul{padding-left:40px;} </style> ''', unsafe_allow_html=True)
     
                    
+
 
 
 
