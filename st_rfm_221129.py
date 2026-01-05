@@ -371,12 +371,27 @@ if page == pages[0]:
       ax_bar.set_xlabel("")
       ax_bar.set_ylabel("Nombre de commandes")
       #ax_bar.tick_params(axis="x", rotation=45)
-      ax_bar.set_xticklabels(
-         [wrap_label(l, 18) for l in labels_pm],
-         rotation=25,
-         ha="center"
-      )
+      #ax_bar.set_xticklabels(
+         #[wrap_label(l, 18) for l in labels_pm],
+         #rotation=25,
+         #ha="center"
+      #)
+      ax_bar.set_xticks([])
       ax_bar.margins(y=0.10)
+
+      legend_handles = [
+         Patch(facecolor=palette_pm[label], label=label)
+         for label in labels_pm
+      ]
+      
+      fig.legend(
+         handles=legend_handles,
+         title="Moyen de paiement",
+         loc="lower center",
+         ncol=5,
+         frameon=False,
+         bbox_to_anchor=(0.5, 0.02)
+      )
 
       #max_count = subset["Regroupement_payment_method"].value_counts().max()
       #ax_bar.set_ylim(0, max_count * 1.10)
@@ -965,6 +980,7 @@ else:
    st.markdown(''' <style> [data-testid="stMarkdownContainer"] ul{padding-left:40px;} </style> ''', unsafe_allow_html=True)
     
                    
+
 
 
 
