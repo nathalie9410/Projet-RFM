@@ -12,6 +12,7 @@ import squarify
 import matplotlib.dates as mdates
 import zipfile
 import io
+import textwrap
 
 
 
@@ -321,7 +322,10 @@ if page == pages[0]:
       "<h4 style='text-align: center;'>Evolution des moyens de paiement</h4>",
       unsafe_allow_html=True
    )
-
+   
+   def wrap_label(s, width=16):
+      return "\n".join(textwrap.wrap(str(s), width=width))
+   
    annees = df["Year"].unique()
 
    labels_pm = ['cod', 'paiement immédiat', 'Paiement en plusieurs fois', 'voucher','portefeuille en ligne']
@@ -354,8 +358,13 @@ if page == pages[0]:
       ax_bar.set_title(str(year))
       ax_bar.set_xlabel("")
       ax_bar.set_ylabel("Nombre de commandes")
-      ax_bar.tick_params(axis="x", rotation=45)
-      #ax_bar.margins(y=0.1)
+      #ax_bar.tick_params(axis="x", rotation=45)
+      ax_bar.set_xticklabels(
+         [wrap_label(l, 18) for l in labels_pm],
+         rotation=0,
+         ha="center"
+      )
+      ax_bar.margins(y=0.10)
 
       #max_count = subset["Regroupement_payment_method"].value_counts().max()
       #ax_bar.set_ylim(0, max_count * 1.10)
@@ -366,7 +375,11 @@ if page == pages[0]:
 
       # --- Camembert des moyens de paiement ---
       ax_pie = axes[1, i]
-      counts_pm = subset["Regroupement_payment_method"].value_counts().reindex(labels_pm).dropna()
+      counts_pm = (
+         subset["Regroupement_payment_method"]
+         .value_counts().reindex(labels_pm)
+         .dropna()
+      )
 
       # on construit une LISTE de couleurs dans le bon ordre
       #pie_colors = [colors1[label] for label in counts_pm.index]
@@ -392,16 +405,31 @@ if page == pages[0]:
       ax_pie.set_title(str(year))
       ax_pie.axis("equal")
 
-      ax_pie.legend(
-         wedges,
-         counts_pm.index,
-         title="Moyen de paiement",
-         loc="center left",
-         bbox_to_anchor=(1.05, 0.5),
-         frameon=False,
-         fontsize=9,
-         title_fontsize=10
-      )
+      handles = wedges
+      labels = list(counts_pm.index)
+
+   fig.legend(
+      handles,
+      labels,
+      title="Moyen de paiement",
+      loc="lower center",
+      ncol=5,
+      frameon=False,
+      bbox_to_anchor=(0.5, 0.02),
+      fontsize=9
+   )
+
+      #ax_pie.legend(
+         #wedges,
+         #counts_pm.index,
+         #title="Moyen de paiement",
+         #loc="center left",
+         #bbox_to_anchor=(1.05, 0.5),
+         #frameon=False,
+         #fontsize=9,
+         #title_fontsize=10
+      #)
+   
 
 
    fig.suptitle(
@@ -410,7 +438,12 @@ if page == pages[0]:
       color="b",
       y=0.96
    )
-   plt.subplots_adjust(top=0.86, hspace=0.35, wspace=0.30)
+   plt.subplots_adjust(
+      top=0.88,
+      bottom=0.12,
+      hspace=0.55,
+      wspace=0.30
+   )
    #fig.tight_layout(rect=[0, 0, 1, 0.90])
    st.pyplot(fig);
 
@@ -426,8 +459,10 @@ if page == pages[0]:
    - Analyser la **performance par moyen de paiement** (taux d'annulation, panier moyen, fréquence d'achat).
    """)
    
-
-   # évolution du chiffre d'affaires
+   # -----------------------------------------------------------
+   # Évolution du chiffre d'affaires
+   # -----------------------------------------------------------
+   
    st.markdown(" <br><br><br><br>", unsafe_allow_html=True)
         
    st.markdown("<h4 style='text-align: center;'>Évolution du chiffre d'affaires</h4>", unsafe_allow_html=True)
@@ -918,6 +953,7 @@ else:
    st.markdown(''' <style> [data-testid="stMarkdownContainer"] ul{padding-left:40px;} </style> ''', unsafe_allow_html=True)
     
                    
+
 
 
 
