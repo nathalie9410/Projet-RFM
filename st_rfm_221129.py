@@ -71,7 +71,7 @@ if page == pages[0]:
       #      na_values=[' ', '\\N', 'NaN ']
        #  )
 
-   # Chemin vers le zip dans ton repo
+   # Chemin vers le zip dans le repo
    zip_path = "datasets.zip"
 
    with zipfile.ZipFile(zip_path) as z:
@@ -152,7 +152,7 @@ if page == pages[0]:
    # -----------------------------------------------------------
    
    st.markdown(
-      "<h4 style='text-align: center;'>Évolution du statut des commandes</h4>",
+      "<h4 style='text-align: center;'>Statuts des commandes</h4>",
       unsafe_allow_html=True
    )
    
@@ -319,7 +319,7 @@ if page == pages[0]:
    # -----------------------------------------------------------
  
    st.markdown(
-      "<h4 style='text-align: center;'>Evolution des moyens de paiement</h4>",
+      "<h4 style='text-align: center;'>Moyens de paiement</h4>",
       unsafe_allow_html=True
    )
    
@@ -416,7 +416,7 @@ if page == pages[0]:
       ncol=5,
       frameon=False,
       bbox_to_anchor=(0.5, 0.02),
-      fontsize=20
+      fontsize=15
    )
 
       #ax_pie.legend(
@@ -433,7 +433,7 @@ if page == pages[0]:
 
 
    fig.suptitle(
-      "Evolution des moyens de paiement",
+      "Évolution des moyens de paiement",
       fontsize=30,
       color="b",
       y=0.96
@@ -465,7 +465,7 @@ if page == pages[0]:
    
    st.markdown(" <br><br><br><br>", unsafe_allow_html=True)
         
-   st.markdown("<h4 style='text-align: center;'>Évolution du chiffre d'affaires</h4>", unsafe_allow_html=True)
+   st.markdown("<h4 style='text-align: center;'>Chiffre d'affaires</h4>", unsafe_allow_html=True)
 
    #######################
    #Rajout d'un ligne de conversion au format datetime
@@ -484,7 +484,7 @@ if page == pages[0]:
          #xdate=True, 
          #ls='-', label='Médiane', color =colors[3])
    #plt.legend()
-   #fig.suptitle('Evolution de la moyenne et de la médiane du chiffre d\'affaire des ventes', fontsize=30, color='b', y=0.98)
+   #fig.suptitle('Évolution de la moyenne et de la médiane du chiffre d\'affaire des ventes', fontsize=30, color='b', y=0.98)
    #plt.tight_layout()
    #ax.xaxis.set_major_locator(mdates.MonthLocator(bymonth=(1, 7)))
    #ax.xaxis.set_minor_locator(mdates.MonthLocator())
@@ -953,6 +953,7 @@ else:
    st.markdown(''' <style> [data-testid="stMarkdownContainer"] ul{padding-left:40px;} </style> ''', unsafe_allow_html=True)
     
                    
+
 
 
 
