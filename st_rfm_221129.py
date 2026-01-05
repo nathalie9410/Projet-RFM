@@ -13,6 +13,7 @@ import matplotlib.dates as mdates
 import zipfile
 import io
 import textwrap
+from matplotlib.patches import Patch
 
 
 
@@ -980,6 +981,7 @@ else:
    st.markdown(''' <style> [data-testid="stMarkdownContainer"] ul{padding-left:40px;} </style> ''', unsafe_allow_html=True)
     
                    
+
 
 
 
