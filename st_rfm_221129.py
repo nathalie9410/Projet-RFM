@@ -109,6 +109,11 @@ if page == pages[0]:
 
    st.markdown("<h2 style='font-weight:lighter; text-align: center; font-size: 60px;text-shadow: -1px -1px #000, 1px 1px #000, -3px 0 4px #000;'>Story Telling</h2>", unsafe_allow_html=True)
    st.title("")
+
+   # -----------------------------------------------------------------
+   # Matrice de corrélation entre les différentes variables numériques
+   # -----------------------------------------------------------------
+   
    st.markdown("<h4 style='text-align: center;'>Analyse de la relation entre les différentes variables numériques</h4>", unsafe_allow_html=True)
    #fig = plt.figure()
    #sns.heatmap(df.corr(), annot=True, center=0, cmap= "magma", annot_kws={"fontsize":8}, fmt=".2f")
@@ -227,7 +232,7 @@ if page == pages[0]:
       ax_pie.axis("equal")  # cercle bien rond
       
    fig.suptitle(
-      "Evolution du statut des commandes",
+      "Évolution du statut des commandes",
       fontsize=30,
       color="b",
       y=0.96)
@@ -953,6 +958,7 @@ else:
    st.markdown(''' <style> [data-testid="stMarkdownContainer"] ul{padding-left:40px;} </style> ''', unsafe_allow_html=True)
     
                    
+
 
 
 
