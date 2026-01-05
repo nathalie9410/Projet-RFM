@@ -157,7 +157,7 @@ if page == pages[0]:
    # -----------------------------------------------------------
    
    st.markdown(
-      "<h4 style='text-align: center;'>Statuts des commandes</h4>",
+      "<h4 style='text-align: center;'>Statut des commandes</h4>",
       unsafe_allow_html=True
    )
    
@@ -317,6 +317,13 @@ if page == pages[0]:
 
    #st.pyplot(fig);
 
+   colors1 = {
+      "cod":"#0173b2",
+      "paiement immédiat":"#de8f05",
+      "Paiement en plusieurs fois":"#029e73",
+      "voucher":"#d55e00",
+      "portefeuille en ligne":"#8172b3"
+   }
 
 
    # -----------------------------------------------------------
@@ -333,7 +340,7 @@ if page == pages[0]:
    
    annees = df["Year"].unique()
 
-   labels_pm = ['cod', 'paiement immédiat', 'Paiement en plusieurs fois', 'voucher','portefeuille en ligne']
+   labels_pm = ["cod", "paiement immédiat", "Paiement en plusieurs fois", "voucher","portefeuille en ligne"]
    colors_pm = ["#0173b2", "#de8f05", "#029e73", "#d55e00", "#8172b3"]
    palette_pm = dict(zip(labels_pm, colors_pm))
 
@@ -353,7 +360,7 @@ if page == pages[0]:
          order=labels_pm,
          dodge=False,
          ax=ax_bar,
-         palette=palette_pm
+         palette= colors1 #palette_pm
       )
 
       leg = ax_bar.get_legend()
@@ -958,6 +965,7 @@ else:
    st.markdown(''' <style> [data-testid="stMarkdownContainer"] ul{padding-left:40px;} </style> ''', unsafe_allow_html=True)
     
                    
+
 
 
 
